@@ -1,0 +1,19 @@
+---
+apiVersion: getambassador.io/v1
+kind:  Mapping
+metadata:
+  name:  moviedbapi-mapping
+spec:
+  prefix: /movie/
+  rewrite: ""
+  service: moviedbapi-svc.cloudmovies:5002
+---
+apiVersion: getambassador.io/v1
+kind:  Mapping
+metadata:
+  name:  moviedbapi-mapping2
+spec:
+  prefix: /getlist
+  rewrite: ""
+  service: moviedbapi-svc.cloudmovies:5002
+
