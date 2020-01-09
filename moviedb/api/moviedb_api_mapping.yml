@@ -6,6 +6,7 @@ metadata:
 spec:
   prefix: /movie/
   rewrite: ""
+  bypass_auth: true
   service: moviedbapi-svc.cloudmovies:5002
 ---
 apiVersion: getambassador.io/v1
