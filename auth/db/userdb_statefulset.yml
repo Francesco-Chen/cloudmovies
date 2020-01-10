@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: userdbstatefulset
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: userdbstatefulset
+spec: 
+  serviceName: userdb
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: userdb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: userdb
+    spec: 
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: userdb
+          image: robyt96/cloudmovies_userdb:1.0
+          ports:
+            - name: userdbport
+              containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - name: data-userdb
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates: 
+  - metadata:
+      name: data-userdb
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 0.5Gi

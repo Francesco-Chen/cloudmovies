@@ -1,4 +1,5 @@
 flask
 flask-bcrypt
 flask-views
+mysql-connector-python
 pyjwt
