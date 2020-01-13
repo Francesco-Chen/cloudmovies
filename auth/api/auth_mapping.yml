@@ -8,6 +8,8 @@ spec:
   proto: http
   allowed_request_headers:
     - "Content-Type"
+  allowed_authorization_headers:
+    - "Cloudmovie-UserId"
   include_body:
     max_bytes: 4096
     allow_partial: true

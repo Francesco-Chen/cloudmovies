@@ -13,16 +13,18 @@ from . import bcrypt, app, cursor
 auth_blueprint = Blueprint('auth', __name__)
 SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious')
 
-def encode_auth_token(user_id):
+def encode_auth_token(user_id, username, user_role):
     """
     Generates the Auth Token
     :return: string
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=300),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=1800),
             'iat': datetime.datetime.utcnow(),
-            'sub': user_id
+            'sub': user_id,
+            'username': username,
+            'role': user_role
         }
         return jwt.encode(
             payload,
@@ -40,7 +42,7 @@ def decode_auth_token(auth_token):
     """
     try:
         payload = jwt.decode(auth_token, SECRET_KEY)
-        return payload['sub']
+        return payload
     except jwt.ExpiredSignatureError:
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
@@ -55,12 +57,6 @@ class LoginAPI(MethodView):
 
         try:
             # get the post data
-            app.logger.info('request: ' + str(request))
-            app.logger.info('request.content_length: ' + str(request.content_length))
-            app.logger.info('request.content_type: ' + str(request.content_type))
-            app.logger.info('request.get_data: ' + str(request.get_data().decode()))
-            app.logger.info('request.values: ' + str(request.values))
-            app.logger.info('request.form: ' + str(request.form))
             form_user = request.form['user']
             form_pwd = request.form['pwd']
 
@@ -75,8 +71,7 @@ class LoginAPI(MethodView):
             if user and bcrypt.check_password_hash(
                 user_pwd, form_pwd
             ):
-                auth_token = encode_auth_token(user_id)
-                print(str(auth_token))
+                auth_token = encode_auth_token(user_id,user_username,user_role)
                 if auth_token:
                     responseObject = {
                         'status': 'success',
@@ -118,26 +113,18 @@ class UserAPI(MethodView):
         else:
             auth_token = ''
         if auth_token:
-            resp = decode_auth_token(auth_token)
-            if not isinstance(resp, str):
-                #user = User.query.filter_by(id=resp).first()
-                cursor.execute("select * from users where id = " + str(resp))
-                user = cursor.fetchone()
+            payload = decode_auth_token(auth_token) # if there is an error then payload is a string
+            if not isinstance(payload, str):
                 responseObject = {
                     'status': 'success',
-                    'data': {
-                        'user_id': user[0],
-                        'role': user[3]
-                        #'user_id': user.id,
-                        #'email': user.email,
-                        #'admin': user.admin,
-                        #'registered_on': user.registered_on
-                    }
+                    'data': payload
                 }
-                return make_response(jsonify(responseObject)), 200
+                resp = make_response(jsonify(responseObject))
+                resp.headers['Cloudmovie-UserId'] = payload['sub']
+                return resp, 200
             responseObject = {
                 'status': 'fail',
-                'message': resp
+                'message': payload
             }
             return make_response(jsonify(responseObject)), 401
         else:
@@ -163,12 +150,4 @@ auth_blueprint.add_url_rule(
     view_func=check_token_view,
     methods=['GET']
 )
-
-
-@auth_blueprint.route('/test',methods=('GET', 'POST'))
-def test():
-    cursor.execute("select * from users where id=1")
-    r = cursor.fetchone()
-    app.logger.info(r)
-    return make_response('Hello, World!\n'), 200
 
