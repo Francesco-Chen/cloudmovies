@@ -16,5 +16,15 @@ metadata:
 spec:
   prefix: /getlist
   rewrite: ""
+  bypass_auth: true
   service: moviedbapi-svc.cloudmovies:5002
-
+---
+apiVersion: getambassador.io/v1
+kind:  Mapping
+metadata:
+  name:  moviedbapi-mapping3
+spec:
+  prefix: /search
+  rewrite: ""
+  bypass_auth: true
+  service: moviedbapi-svc.cloudmovies:5002

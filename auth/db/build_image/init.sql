@@ -11,3 +11,10 @@ values(
   '$2b$10$wV53zulfzA7RLfKPSFsZUOcmPGMnOnxlMLfFjh9DzstV3HRuNKSxO',
   'admin'
 );
+
+create table favorites (
+  userid int,
+  movieid int,
+  created datetime,
+  primary key (userid,movieid)
+);
