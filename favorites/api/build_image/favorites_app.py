@@ -114,6 +114,28 @@ class deleteFavorite(Resource):
         return make_response(jsonify(responseObject), 200)
 #
 
+class getFavorites(Resource):
+    def get(self):
+        # get user id
+        if check_header(request):
+            userid = int(request.headers['Cloudmovie-UserId'])
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'internal error: user id not found'
+            }
+            return make_response(jsonify(responseObject), 500)
+        
+        # query
+        query = "select movieid from favorites where userid = %s" %userid
+        cur = cnx.cursor()
+        cur.execute(query)
+        records = cur.fetchall()
+        list_movieid = [r[0] for r in records]
+        return jsonify(list_movieid)
+#
+
+
 api.add_resource(addFavorite, '/addfavorite')
 api.add_resource(deleteFavorite, '/deletefavorite')
-
+api.add_resource(getFavorites, '/getfavorites')

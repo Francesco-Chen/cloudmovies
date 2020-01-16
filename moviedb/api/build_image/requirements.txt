@@ -1,4 +1,5 @@
 flask
 flask_restful
 flask.ext
+flask-cors
 mysql-connector-python

@@ -1,0 +1,10 @@
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: getposters-mapping
+spec:
+  prefix: /function/getposters
+  rewrite: ""
+  bypass_auth: true 
+  service: gateway.openfaas:8080

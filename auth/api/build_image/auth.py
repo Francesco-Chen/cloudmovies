@@ -1,17 +1,32 @@
 import jwt
 import datetime
 import os
-
+import mysql.connector
 from flask import (
     Blueprint, request, make_response, jsonify
 )
 from flask.views import MethodView
 
-from . import bcrypt, app, cursor
+from . import bcrypt, app
 
 
 auth_blueprint = Blueprint('auth', __name__)
 SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious')
+
+cnx = None
+def get_cnx():
+    global cnx
+    if cnx and cnx.is_connected():
+        return cnx
+    else:
+        cnx = mysql.connector.connect(
+            host='userdbsvc',
+            user='userdb_user',
+            passwd='userdb_pwd',
+            database='userdb'
+        )
+        return cnx
+
 
 def encode_auth_token(user_id, username, user_role):
     """
@@ -61,6 +76,7 @@ class LoginAPI(MethodView):
             form_pwd = request.form['pwd']
 
             # fetch the user data
+            cursor = get_cnx().cursor(buffered=True)
             cursor.execute('select * from users where username like "%s"' %form_user)
             user = cursor.fetchone()
             if user:

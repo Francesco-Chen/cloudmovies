@@ -2,20 +2,30 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 import mysql.connector
 from flask import jsonify
+from flask_cors import CORS
 
-cnx = mysql.connector.connect(
-    host='mysqlsvc',
-    user='movie_db_user',
-    passwd='movie_db_pwd',
-    database='movie_db',
-    auth_plugin='mysql_native_password'
-)
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
+
+cnx = None
+def get_cnx():
+    global cnx
+    if cnx and cnx.is_connected():
+        return cnx
+    else:
+        cnx = mysql.connector.connect(
+            host='mysqlsvc',
+            user='movie_db_user',
+            passwd='movie_db_pwd',
+            database='movie_db',
+            auth_plugin='mysql_native_password'
+        )
+        return cnx
 
 class MovieById(Resource):
     def get(self, movie_id):
-        cur = cnx.cursor(buffered=True)
+        cur = get_cnx().cursor(buffered=True)
         try:
             query = "select * from movietable where id =%d "  %int(movie_id)
         except:
@@ -36,7 +46,7 @@ class MovieList(Resource):
         except:
             start = 0
         limit = 20
-        cur = cnx.cursor(buffered=True)
+        cur = get_cnx().cursor(buffered=True)
         query = (
             "select id, title"
             " from movietable"
@@ -44,10 +54,10 @@ class MovieList(Resource):
             " limit %d, %d" %(start, limit)
         )
         app.logger.info('query: ' + query)
-        app.logger.info('header-id: ' + request.headers.get('Cloudmovie-UserId','header not found'))
         cur.execute(query)
         records = cur.fetchall()
-        return jsonify(records)
+        list_movies = [{'id': r[0], 'title': r[1]} for r in records]
+        return jsonify(movies=list_movies)
 
 class Search(Resource):
     def get(self):
@@ -55,7 +65,7 @@ class Search(Resource):
             '%' + request.args.get('title', '') + '%',
             '%' + request.args.get('genre', '') + '%'
         )
-        cur = cnx.cursor(buffered=True)
+        cur = get_cnx().cursor(buffered=True)
         query = (
             "select id, title"
             " from movietable"
@@ -67,7 +77,6 @@ class Search(Resource):
         cur.execute(query, filter)
         records = cur.fetchall()
         return jsonify(records)
-
 
 
 api.add_resource(MovieById, '/movie/<movie_id>')
