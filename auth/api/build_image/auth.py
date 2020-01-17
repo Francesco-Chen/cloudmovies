@@ -100,7 +100,7 @@ class LoginAPI(MethodView):
                     'status': 'fail',
                     'message': 'User or password are incorrect.'
                 }
-                return make_response(jsonify(responseObject)), 404
+                return make_response(jsonify(responseObject)), 401
         except Exception as e:
             app.logger.info(e)
             responseObject = {

@@ -20,10 +20,14 @@ def handle(event, context):
     baseUrl = 'http://image.tmdb.org/t/p/original'
     movie = tmdb.Movies(movieid) # call TMDB API
     postersUrl = []
-    for poster in movie.images(include_image_language=['en'])['posters']:
-        imageUrl = poster['file_path']
-        postersUrl += [baseUrl + imageUrl]
+    #for poster in movie.images(include_image_language=['en'])['posters']:
+    #    imageUrl = poster['file_path']
+    #   postersUrl += [baseUrl + imageUrl]
+    postersUrl = baseUrl + movie.images(include_image_language=['en'])['posters'][0]['file_path']
     return {
         "statusCode": 200,
-        "body": postersUrl
+        "body": {"url": postersUrl},
+        "headers": {
+            "Access-Control-Allow-Origin": "*"
+        }   
     }
