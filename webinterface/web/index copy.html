@@ -8,8 +8,19 @@
     <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>CloudMovies</title>
+    <style>
+
+
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+
+</style>
 </head>
 <body onload="getMovieList()">
 
@@ -24,31 +35,29 @@
 <div class="colmask threecol">
     <div class="colmid">
         <div class="colleft">
+
             <div class="col1">
                 <!-- Column 1 start -->
-                <form class="search-container" onsubmit="return false">
-                    <input type="text" id="searchMovieInput" placeholder="Search for a movie">
-                    <a href="javascript:searchMovie()"><img class="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png"></a>
-                </form>
+            <center>
+            <form action="/">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            </center>       
 
                 <div id="peopleList"></div>
-                <script id="personTmpl" type="text/x-jsrender">
 
+<script id="personTmpl" type="text/x-jsrender">
 
+<div class="column">
 
-       <img src="{{:url}}" alt="Mia Immagine" width="300">
-       <br>
-  
-       
-        <h1>Titolo: {{:title}}</h1>
+        <img src="{{:url}}" alt="Mia Immagine" width="200">
+        
         <br>
-        Anno: {{:year}}
-        <br>
-        Direttore: 
-        <br>
-        Durata: 
 
+        <h2>{{:title}}</h2>
 
+</div>
 </script>
 
 <script>
@@ -56,11 +65,41 @@ var myTemplate = $.templates("#personTmpl");
 
 var movies = [
   {
+    id: "01",
+    title: "avatar",
+    url: "http://histella.myds.me/avatar.jpeg",
+    year: "2016"
+  },
+    {
+    id: "01",
+    title: "avatar",
+    url: "http://histella.myds.me/avatar.jpeg",
+    year: "2016"
+  },
+    {
+    id: "01",
+    title: "avatar",
+    url: "http://histella.myds.me/avatar.jpeg",
+    year: "2016"
+  },
+    {
+    id: "01",
+    title: "avatar",
+    url: "http://histella.myds.me/avatar.jpeg",
+    year: "2016"
+  },
+    {
+    id: "01",
+    title: "avatar",
+    url: "http://histella.myds.me/avatar.jpeg",
+    year: "2016"
+  },
+  {
     id: "02",
     title: "La citta incantata",
     url: "http://histella.myds.me/Spirited_away.jpg",
-    year: "2004",
-    actor: "adf,asdf,sdf"
+    year: "2004"
+
   }
 ];
 
