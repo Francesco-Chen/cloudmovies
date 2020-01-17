@@ -10,6 +10,12 @@
   <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
     
     <title>CloudMovies</title>
+<style>
+    .poster {
+  float: left;
+  width: 50%;
+}
+</style>
 </head>
 <body onload="getMovieList()">
 
@@ -35,19 +41,35 @@
                 <script id="personTmpl" type="text/x-jsrender">
 
 
-
-       <img src="{{:url}}" alt="Mia Immagine" width="300">
+        <div class="poster">
+       <img src="notfound.png" alt="Mia Immagine" width="300">
        <br>
-  
-       
-        <h1>Titolo: {{:title}}</h1>
+        </div>
+       <div id="info">
+        <h1>{{:title}}</h1>
         <br>
-        Anno: {{:year}}
+        <b>Release date: </b>{{if release_date}} {{:release_date}} {{else}} N/A {{/if}}
         <br>
-        Direttore: 
+        <b>Vote: </b>{{if vote_average}} {{:vote_average}} {{else}} N/A {{/if}}
         <br>
-        Durata: 
-
+        <b>Geners: </b>{{if genres}} {{:genres}} {{else}} N/A {{/if}}
+        <br>
+        <b>Homepage: </b><a href="{{:homepage}}"> {{if homepage}} {{:homepage}} {{else}} N/A {{/if}} </a>
+        <br>
+        <b>Budget: </b>{{if budget}} {{:budget}} $ {{else}} N/A {{/if}}
+        <br>
+        <b>Original language: </b>{{if original_language}} {{:original_language}} {{else}} N/A {{/if}}
+        <br>
+        <b>Overview: </b>{{if overview}} {{:overview}} {{else}} N/A {{/if}}
+        <br>
+        <b>Producton Companies: </b>{{if production_companies}} {{:production_companies}} {{else}} N/A {{/if}}
+        <br>
+        <b>Runtime: </b>{{if runtime}} {{:runtime}} min {{else}} N/A {{/if}}
+        <br>
+        <b>Revenue: </b>{{if revenue}} {{:revenue}} $ {{else}} N/A {{/if}}
+        <br>
+        <b>Keywords:</b> {{if keywords}} {{:keywords}} {{else}} N/A {{/if}}
+    </div>
 
 </script>
 
@@ -55,13 +77,7 @@
 var myTemplate = $.templates("#personTmpl");
 
 var movies = [
-  {
-    id: "02",
-    title: "La citta incantata",
-    url: "http://histella.myds.me/Spirited_away.jpg",
-    year: "2004",
-    actor: "adf,asdf,sdf"
-  }
+  {'budget': 237000000, 'genres': ['Action', 'Adventure', 'Fantasy', 'Science Fiction'], 'homepage': 'http://www.avatarmovie.com/', 'id': 19995, 'keywords': ['culture clash', 'future', 'space war', 'space colony', 'society', 'space travel', 'futuristic', 'romance', 'space', 'alien', 'tribe', 'alien planet', 'cgi', 'marine', 'soldier', 'battle', 'love affair', 'anti war', 'power relations', 'mind and soul', '3d'], 'original_language': 'en', 'original_title': 'Avatar', 'overview': 'In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.', 'popularity': 150.437577, 'production_companies': ['Ingenious Film Partners', 'Twentieth Century Fox Film Corporation', 'Dune Entertainment', 'Lightstorm Entertainment'], 'production_countries': ['United States of America', 'United Kingdom'], 'release_date': '2009-12-10', 'revenue': 2787965087, 'runtime': '162', 'spoken_languages': ['English', 'Espau00f1ol'], 'status': 'Released', 'tagline': 'Enter the World of Pandora.', 'title': 'Avatar', 'vote_average': 7.2, 'vote_count': 11800}
 ];
 
 var html = myTemplate.render(movies);
