@@ -76,7 +76,8 @@ class Search(Resource):
         )
         cur.execute(query, filter)
         records = cur.fetchall()
-        return jsonify(records)
+        list_movies = [{'id': r[0], 'title': r[1]} for r in records]
+        return jsonify(movies=list_moveis)
 
 
 api.add_resource(MovieById, '/movie/<movie_id>')

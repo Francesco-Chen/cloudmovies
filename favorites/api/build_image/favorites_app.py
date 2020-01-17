@@ -2,15 +2,28 @@ from flask import Flask, request, make_response
 from flask_restful import Resource, Api
 import mysql.connector
 from flask import jsonify
+from flask_cors import CORS
 
-cnx = mysql.connector.connect(
-    host='userdbsvc',
-    user='userdb_user',
-    passwd='userdb_pwd',
-    database='userdb'
-)
+
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
+
+
+cnx = None
+def get_cnx():
+    global cnx
+    if cnx and cnx.is_connected():
+        return cnx
+    else:
+        cnx = mysql.connector.connect(
+            host='userdbsvc',
+            user='userdb_user',
+            passwd='userdb_pwd',
+            database='userdb'
+        )
+        return cnx
+
 
 def check_header(request):
     userid = request.headers.get('Cloudmovie-UserId','')
@@ -43,7 +56,7 @@ class addFavorite(Resource):
             return make_response(jsonify(responseObject), 500)
         
         # get number of favorites
-        cur = cnx.cursor()
+        cur = get_cnx().cursor()
         query = "select count(*) from favorites where userid = %d" %userid
         cur.execute(query)
         num_of_favorites = cur.fetchone()[0]
@@ -56,7 +69,7 @@ class addFavorite(Resource):
             )
             try:
                 cur.execute(query)
-                cnx.commit()
+                get_cnx().commit()
             except mysql.connector.Error as error:
                 responseObject = {
                     'status': 'fail',
@@ -100,13 +113,13 @@ class deleteFavorite(Resource):
             return make_response(jsonify(responseObject), 500)
         
         # delete row
-        cur = cnx.cursor()
+        cur = get_cnx().cursor()
         query = (
             "delete from favorites where userid = %s and movieid = %s"
             %(userid, movieid)
         )
         cur.execute(query)
-        cnx.commit()
+        get_cnx().commit()
         responseObject = {
             'status': 'success',
             'message': str(cur.rowcount) + ' record(s) deleted'
@@ -128,7 +141,7 @@ class getFavorites(Resource):
         
         # query
         query = "select movieid from favorites where userid = %s" %userid
-        cur = cnx.cursor()
+        cur = get_cnx().cursor()
         cur.execute(query)
         records = cur.fetchall()
         list_movieid = [r[0] for r in records]
