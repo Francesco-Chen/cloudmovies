@@ -16,7 +16,7 @@ function login( ) {
         data: data,
         success: function(result){
             //$("#mainContentDiv").html(JSON.stringify(result));
-            alert("Successfully logged in!");
+            
             
             // svuoto campi form username e password
             $('#username').val('');
@@ -33,8 +33,8 @@ function login( ) {
 function openSession(t, u) {
 	token = t;
 	current_user = u;
-
-	// mostro e nascondo i div giusti
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('current_user', current_user);
 	$('#favorites').show('slow');
 	$('#loginDiv').hide('slow');
 	$('#welcomeDiv').show('slow');
@@ -49,6 +49,8 @@ function logout( ) {
 function closeSession( ) {
 	token = "";
     current_user = "";
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('current_user');
     myFavorites = new Array();
     $('#favorites').hide('slow');
 	$('#loginDiv').show('slow');
@@ -57,7 +59,9 @@ function closeSession( ) {
 }
 
 function checkSession( ) {
-	//se trovo token nel localstorage lo leggo e chiamo la openSession
+    if (sessionStorage.getItem('token')) {
+        openSession(sessionStorage.getItem('token'), sessionStorage.getItem('current_user'));
+    }
 }
 
 // movie db handling
@@ -260,7 +264,8 @@ function toggleFavorite(movieid) {
 				request.setRequestHeader("Authorization", "Bearer " + token);
 			},
 	        success: function(result){
-	        	myFavorites.splice(myFavorites.indexOf(movieid,1));
+	        	//myFavorites.splice(myFavorites.indexOf(movieid,1));
+                myFavorites = $.grep(myFavorites, function(value) { return value != movieid; });
 	        	$("#favoriteIcon").attr("src", "images/addfavorite.png");
 	        },
 	        error: function(msg) {

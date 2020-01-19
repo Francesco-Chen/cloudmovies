@@ -6,14 +6,12 @@ html{
 
 .poster {
   float: left;
-  width: 50%;
+  width: 350px;
 }
 
 .login {
 	height:160px;
-	width:230px;
-	margin:auto;
-	border:1px #CCC solid;
+	width:180px;
 	padding:10px;
 }
 
@@ -38,6 +36,7 @@ body {
 	width: 490px;
 	display: block;
 	margin: 0 auto;
+	position:relative;
 }
 
 input#searchMovieInput{
@@ -68,12 +67,11 @@ input#searchMovieInput{
 }
 
 .search-icon{
-	position: relative;
-	float: right;
-	width: 75px;
-	height: 75px;
-	top: -72px;
-	right: -45px;
+	position: absolute;
+	right:-40px;
+	top:-11px;
+	width:75px;
+	height:75px;
 }
 /*end of searchbar css*/
 
@@ -225,4 +223,22 @@ img {
 #footer p {
 	padding:10px;
 	margin:0;
+}
+
+#cmMainTable {
+	width:100%;
+}
+
+#cmLeftCol {
+	width:210px;
+	background-color: #ddd;
+}
+
+#cmMiddleCol {
+	padding-left: 12px;
+}
+
+#cmRightCol {
+	width:210px;
+	background-color: #ddd;
 }
