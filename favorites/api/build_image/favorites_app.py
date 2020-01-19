@@ -17,10 +17,10 @@ def get_cnx():
         return cnx
     else:
         cnx = mysql.connector.connect(
-            host='userdbsvc',
-            user='userdb_user',
-            passwd='userdb_pwd',
-            database='userdb'
+            host='favoritesdbsvc',
+            user='favoritesdb_user',
+            passwd='favoritesdb_pwd',
+            database='favoritesdb'
         )
         return cnx
 

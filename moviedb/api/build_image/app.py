@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 import mysql.connector
+import ast
 from flask import jsonify
 from flask_cors import CORS
 
@@ -23,6 +24,13 @@ def get_cnx():
         )
         return cnx
 
+fields = [
+    'budget','genres','homepage','id','keywords','original_language',
+    'original_title','overview','popularity','production_companies',
+    'production_countries','release_date','revenue','runtime',
+    'spoken_languages','status','tagline','title','vote_average','vote_count'
+]
+
 class MovieById(Resource):
     def get(self, movie_id):
         cur = get_cnx().cursor(buffered=True)
@@ -35,8 +43,24 @@ class MovieById(Resource):
             }
             return resp, 500
         cur.execute(query)
-        records = cur.fetchall()
-        return jsonify(records)
+        record = cur.fetchone()
+        if record:
+            d = {key: value for key, value in zip(fields, record)}
+
+            d['genres'] = ast.literal_eval(d['genres'])
+            d['keywords'] = ast.literal_eval(d['keywords'])
+            d['spoken_languages'] = ast.literal_eval(d['spoken_languages'])
+            d['production_companies'] = ast.literal_eval(d['production_companies'])
+            d['production_countries'] = ast.literal_eval(d['production_countries'])
+
+            d['genres'] = [genre['name'] for genre in d['genres']]
+            d['keywords'] = [keyword['name'] for keyword in d['keywords']]
+            d['spoken_languages'] = [lang['name'] for lang in d['spoken_languages']]
+            d['production_companies'] = [comp['name'] for comp in d['production_companies']]
+            d['production_countries'] = [countr['name'] for countr in d['production_countries']]
+        else:
+            d = []
+        return jsonify(info=d)
 
 class MovieList(Resource):
     def get(self):
@@ -61,23 +85,48 @@ class MovieList(Resource):
 
 class Search(Resource):
     def get(self):
-        filter = (
-            '%' + request.args.get('title', '') + '%',
-            '%' + request.args.get('genre', '') + '%'
-        )
-        cur = get_cnx().cursor(buffered=True)
-        query = (
-            "select id, title"
-            " from movietable"
-            " where title like %s"
-            "  and genres like %s"
-            " order by vote_average desc"
-            " limit 20"
-        )
-        cur.execute(query, filter)
-        records = cur.fetchall()
-        list_movies = [{'id': r[0], 'title': r[1]} for r in records]
-        return jsonify(movies=list_moveis)
+        if request.args.get('id', ''):
+            string_id = request.args['id']
+            list_id = string_id.split(',')
+            try:
+                list_id = [int(e) for e in list_id]
+            except:
+                resp = {
+                    'status': 'fail',
+                    'message': 'Movie Id should be integers'
+                }
+                return resp, 500
+            
+            cur = get_cnx().cursor(buffered=True)
+            query = (
+                "select id, title"
+                " from movietable"
+                " where id in (%s)"
+                %string_id
+            )
+            cur.execute(query)
+            records = cur.fetchall()
+            list_movies = [{'id': r[0], 'title': r[1]} for r in records]
+            return jsonify(movies=list_movies)
+        
+        else:
+            filter = (
+                '%' + request.args.get('title', '') + '%',
+                '%' + request.args.get('genre', '') + '%'
+            )
+            cur = get_cnx().cursor(buffered=True)
+            query = (
+                "select id, title"
+                " from movietable"
+                " where title like %s"
+                "  and genres like %s"
+                " order by vote_average desc"
+                " limit 20"
+            )
+            cur.execute(query, filter)
+            records = cur.fetchall()
+            list_movies = [{'id': r[0], 'title': r[1]} for r in records]
+            return jsonify(movies=list_movies)
 
 
 api.add_resource(MovieById, '/movie/<movie_id>')

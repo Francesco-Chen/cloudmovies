@@ -25,3 +25,13 @@ spec:
   rewrite: ""
   bypass_auth: true 
   service: authsvc.cloudmovies:5000
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: register-mapping
+spec:
+  prefix: /auth/register
+  rewrite: ""
+  bypass_auth: true 
+  service: authsvc.cloudmovies:5000

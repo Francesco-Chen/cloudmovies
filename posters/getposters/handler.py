@@ -23,11 +23,19 @@ def handle(event, context):
     #for poster in movie.images(include_image_language=['en'])['posters']:
     #    imageUrl = poster['file_path']
     #   postersUrl += [baseUrl + imageUrl]
-    postersUrl = baseUrl + movie.images(include_image_language=['en'])['posters'][0]['file_path']
+    try:
+        postersUrl = baseUrl + movie.images()['posters'][0]['file_path']
+    except:
+        return {
+            "statusCode": 404,
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
     return {
         "statusCode": 200,
         "body": {"url": postersUrl},
         "headers": {
             "Access-Control-Allow-Origin": "*"
-        }   
+        }
     }

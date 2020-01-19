@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: moviedb
+  name: moviedbstatefulset
   namespace: cloudmovies
   labels:
-    app.kubernetes.io/name: moviedb
+    app.kubernetes.io/name: moviedbstatefulset
 spec:
   serviceName: mysql
   selector:
@@ -26,15 +26,17 @@ spec:
               containerPort: 3306
               protocol: TCP
           volumeMounts:
-            - name: data-db
+            - name: data-moviedb
               mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
-      name: data-db
+      name: data-moviedb
     spec:
-      accessModes:
-        - ReadWriteOnce
-      storageClassName: standard
+      storageClassName: manual
+      accessModes: ["ReadWriteOnce"]
       resources:
         requests:
           storage: 0.5Gi
+      selector:
+        matchLabels:
+          type: moviedb-pv

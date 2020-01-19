@@ -64,6 +64,74 @@ def decode_auth_token(auth_token):
         return 'Invalid token. Please log in again.'
 
 
+class RegisterAPI(MethodView):
+    """
+    User Registration Resource
+    """
+
+    def post(self):
+        try:
+            # get the post data
+            form_user = request.form['user']
+            form_pwd = request.form['pwd']
+            
+            # check if user already exists
+            cursor = get_cnx().cursor(buffered=True)
+            cursor.execute('select * from users where username like "%s"' %form_user)
+            user = cursor.fetchone()
+            
+            # register user
+            if not user:
+                try:
+                    query = (
+                        "insert into users (username, pwd, role)"
+                        " values('%s', '%s', 'guest')"
+                        %(form_user, bcrypt.generate_password_hash(form_pwd,10).decode())
+                    )
+                    # insert the user
+                    cursor.execute(query)
+                    get_cnx().commit()
+                    
+                    # get user id
+                    query = (
+                        'select id from users where username like "%s"' %form_user
+                    )
+                    cursor.execute(query)
+                    user_id = cursor.fetchone()[0]
+                    
+                    # generate the auth token
+                    auth_token = encode_auth_token(user_id,form_user,"guest")
+                    if auth_token:
+                        responseObject = {
+                            'status': 'success',
+                            'message': 'Successfully registered.',
+                            'auth_token': auth_token.decode()
+                        }
+                        return make_response(jsonify(responseObject)), 200
+                
+                # if some errors
+                except Exception as e:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': 'Some error occurred. Please try again./n' + str(e)
+                    }
+                    return make_response(jsonify(responseObject)), 401
+            else:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'User already exists. Please Log in.',
+                }
+                return make_response(jsonify(responseObject)), 202
+        
+        except Exception as e:
+            app.logger.info(e)
+            responseObject = {
+                'status': 'fail',
+                'message': 'Try again'
+            }
+            return make_response(jsonify(responseObject)), 500
+
+
 class LoginAPI(MethodView):
     """
     User Login Resource
@@ -152,6 +220,7 @@ class UserAPI(MethodView):
 #
 
 # define the API resources
+register_view = RegisterAPI.as_view('register_api')
 login_view = LoginAPI.as_view('login_api')
 check_token_view = UserAPI.as_view('check_token_api')
 
@@ -166,4 +235,8 @@ auth_blueprint.add_url_rule(
     view_func=check_token_view,
     methods=['GET']
 )
-
+auth_blueprint.add_url_rule(
+    '/auth/register',
+    view_func=register_view,
+    methods=['POST']
+)
