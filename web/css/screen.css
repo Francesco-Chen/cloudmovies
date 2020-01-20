@@ -4,6 +4,59 @@ html{
 	-ms-text-size-adjust:100%
 }
 
+#info {
+	color:white;
+	font-size: 16px;
+}
+
+/*error message color*/
+#loginError {
+	color: red;
+}
+
+/**/
+#mainTitleDiv {
+	margin-top:10px;
+	font-size:25px;
+	font-weight:bold;
+	width:100%;
+	text-align:center;
+	color: white;
+}
+/*movie title*/
+.imagetitle{
+	color: white;
+	font-size: 17px;
+	margin-top:-5px;
+	font-weight:bold;
+}
+
+/*navigation bass start*/
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f1f1f1;
+}
+
+li {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  background-color: black;
+  cursor: pointer;
+  font-size: 150%;
+}
+
+li:hover {
+	background-color: #444444;
+	color: white;
+
+}
+/*navigation bar end*/
+
 .navigation{
 	cursor: pointer;
 }
@@ -13,22 +66,24 @@ html{
 #welcomemsg{
 	font-size: 150%;
 	padding:8px;
+	color: white;
+	text-align: center;
 }
 #logoutbutton{
-	border: none;
-  padding: 12px 24px;
+  padding: 6px 12px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 15px;
-  margin: 4px 2px;
+  font-size: 16px;
+  margin: 1px 1px;
   cursor: pointer;
-	background-color: gray;
-  color: white;
-  border: 2px solid #e7e7e7;
+  background-color: #cbcdcd;
+  color: black;
+  border: 2px solid #1c1c1c;
+  
 }
 #showmorebutton{
-	  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -61,7 +116,7 @@ body {
 	padding:0;
 	border:0;			/* This removes the border around the viewport in old versions of IE */
 	width:100%;
-	background:#fff;
+	background:black;
 	min-width:600px;		/* Minimum width of layout - remove line if not required */
 					/* The min-width property does not work in old versions of Internet Explorer */
 	font-size:90%;
@@ -140,6 +195,7 @@ img {
 	clear:both;
 	float:left;
 	width:100%;
+	background-color: #1c1c1c;
 }
 #header {
 	border-bottom:1px solid #000;
@@ -255,6 +311,8 @@ img {
 	float:left;
 	width:100%;
 	border-top:1px solid #000;
+	color: white;
+	position: absolute;
 }
 #footer p {
 	padding:10px;
@@ -263,19 +321,21 @@ img {
 
 #cmMainTable {
 	width:100%;
+	min-height: 100vh;
 }
 
 #cmLeftCol {
 	width:210px;
-	background-color: #ddd;
+	background-color: #1c1c1c;
 }
 
 #cmMiddleCol {
 	padding-left: 12px;
 	padding-right: 12px;
+	background-color: #444444;
 }
 
 #cmRightCol {
 	width:210px;
-	background-color: #ddd;
+	background-color: #1c1c1c;
 }

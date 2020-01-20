@@ -13,7 +13,9 @@
 
 <div id="header">
     <p align="center">
-        <iframe src="https://ntmaker.gfto.ru/newneontexten/?image_height=120&image_width=600&image_font_shadow_width=1&image_font_size=100&image_background_color=FFFFFF&image_text_color=DE0000&image_font_shadow_color=F79292&image_url=&image_text=Cloud Movies&image_font_family=Screpka&" frameborder='no' scrolling='no' width="600" height="120"></iframe>
+       <!-- <iframe src="https://ntmaker.gfto.ru/newneontexten/?image_height=120&image_width=600&image_font_shadow_width=1&image_font_size=100&image_background_color=1c1c1c&image_text_color=DE0000&image_font_shadow_color=F79292&image_url=&image_text=Cloud%20Movies&image_font_family=Screpka&" frameborder='no' scrolling='no' width="600" height="120"></iframe>
+       -->
+       <img src="images/title.gif">
     </p>
     <ul>
 
@@ -21,8 +23,11 @@
 </div>
 <table id="cmMainTable" style="width:100%;border:0;"><tr>
     <td id="cmLeftCol" valign="top">
-                <div class="navigation" id="home"><b onclick="getMovieList()">Homepage</b></div>
-                <div class="navigation" id="favorites" style="display: none"><b onclick="showFavorites()">My favorites</b></div>
+
+        <ul>
+		  <li id="home" onclick="getMovieList()">Homepage</li>
+		  <li  id="favorites" style="display: none" onclick="showFavorites()">My favorites</li>
+		</ul>
 
     </td>
     <td id="cmMiddleCol" valign="top">
@@ -42,7 +47,7 @@
                   </form>
                   <div id="loginError"></div>
                 </div> 
-                <div id="welcomeDiv" style="display: none">
+                <div id="welcomeDiv" style="display: none" align="center">
                     <div id="welcomemsg"></div>
                     <input id="logoutbutton" type="button" value="Sign Out" onclick="logout()">
                 </div>
@@ -55,7 +60,7 @@
 
 
 <script id="mainDivTmpl" type="text/x-jsrender">
-    {{if title}}<div id="mainTitleDiv" style="margin-top:10px;font-size:14px;font-weight:bold;width:100%;text-align:center;">{{:title}}</div>{{/if}}
+    {{if title}}<div id="mainTitleDiv">{{:title}}</div>{{/if}}
     {{for movies tmpl="#listMovieTmpl" /}}
     {{if showmore}}<div id="showMoreButton{{:start}}" style="clear:both;width:100%;margin-top:5px;text-align:center;">
         <input id="showmorebutton" type=button value="Show More" onclick="getMovieList({{:start}})"></div>{{/if}}
@@ -66,7 +71,7 @@
     <div>
     <img src="images/notfound.png" alt="loading..." width="180" height="270" id="poster{{:id}}" onclick="infoMovie({{:id}})"/>
     {{:"<scr" + "ipt defer type=&quot;text/javascript&quot;>"}}getPoster({{:id}});{{:"</scr" + "ipt>"}}
-    </div><div style="margin-top:-5px;font-size:14px; font-weight:bold;">{{:title}}</div>
+    </div><div class="imagetitle" >{{:title}}</div>
     </div>
 </script>
 

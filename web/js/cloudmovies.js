@@ -1,4 +1,4 @@
-var api_url = "http://10.107.105.205:8088";
+var api_url = "http://10.111.118.79:8088";
 var token = "";
 var current_user = "";
 
@@ -29,6 +29,16 @@ function login( ) {
         }
     });
 }
+
+$('#username').keypress(function (e) {
+    alert(e);
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if (keycode=='13') {
+        alert(e);
+        login();
+    }
+}
+);
 
 function openSession(t, u) {
 	token = t;

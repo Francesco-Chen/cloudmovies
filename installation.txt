@@ -28,6 +28,9 @@ kubectl apply -f favorites/api/favorites_deployment.yml
 kubectl apply -f auth/api/auth_svc.yml
 kubectl apply -f moviedb/api/moviedbapi_svc.yml
 kubectl apply -f favorites/api/favorites_svc.yml
+kubectl apply -f auth/db/userdb_svc.yml
+kubectl apply -f favorites/db/favoritesdb_svc.yml
+kubectl apply -f moviedb/db/moviedb_svc.yml
 
 # deploying the mapping 
 kubectl apply -f auth/api/auth_mapping.yml
@@ -38,7 +41,8 @@ kubectl apply -f favorites/api/favorites_mapping.yml
 export OPENFAAS_URL=http://127.0.0.1:31112
 # create secret with tmdb api key
 kubectl create secret generic tmdb-api-key --from-file=tmdb-api-key=tmdb_api_key.txt -n openfaas-fn
-faas-cli deploy -f posters/getposters.yml #spero
+# run within posters floder
+faas-cli deploy -f getposters.yml
 # apply mapping
 kubectl apply -f posters/getposters_mapping.yml
 
