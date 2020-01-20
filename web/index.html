@@ -31,19 +31,20 @@
 
     </td>
     <td id="cmMiddleCol" valign="top">
-                <form class="search-container" onsubmit="return false">
-                    <input type="text" id="searchMovieInput" placeholder="Search for a movie">
-                    <img class="search-icon" onclick="searchMovie();" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png">
+                <form class="search-container" onsubmit="searchMovie(); return false;">
+                    <input type="text" id="searchMovieInput" placeholder="Search for a movie" />
+                    <img class="search-icon" onclick="searchMovie();" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" />
                 </form>
                 <div id="mainContentDiv"></div>
 
     </td>
     <td id="cmRightCol" valign="top">
                <div class="login" id="loginDiv">
-                  <form id="loginform">
-                    <input type="text" placeholder="Username" id="username">  
-                    <input type="password" placeholder="Password" id="password">  
-                    <input type="button" value="Sign In" onclick="login()">
+                  <form id="loginform" onsubmit="login(); return false;">
+                    <input type="text" placeholder="Username" id="username" />
+                    <input type="password" placeholder="Password" id="password" />  
+                    <input type="submit" value="Sign In" />&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Register" onclick="register();" />
                   </form>
                   <div id="loginError"></div>
                 </div> 

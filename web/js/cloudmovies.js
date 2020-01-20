@@ -1,14 +1,52 @@
-var api_url = "http://10.111.118.79:8088";
+var api_url = "http://10.104.154.107:8088";
 var token = "";
 var current_user = "";
 
 // login handling
+function register( ) {
+    var username = $('#username').val();
+    var password = $('#password').val();
+
+    if (username.length < 4) {
+        alert("Username too short (min 4 char)");
+        return false;
+    }
+    if (password.length < 6) {
+        alert("Password too short (min 6 char)");
+        return false;
+    }
+
+    var url = api_url + "/auth/register"
+    data = "user=" + encodeURI(username) + "&pwd=" + encodeURI(password);
+    //console.log(data)
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        statusCode: {
+            200: function(result) {
+                $('#username').val('');
+                $('#password').val('');
+                openSession(result.auth_token, username);
+            },
+            202: function(result) {
+                $("#loginError").html('User already exists');
+                setTimeout(function() { $("#loginError").html(''); }, 3000);
+            },
+            500: function(result) {
+                $("#loginError").html('Server error');
+                setTimeout(function() { $("#loginError").html(''); }, 3000);
+            }
+        }
+    });
+}
+
 function login( ) {
     var username = $('#username').val();
     var password = $('#password').val();
 
     var url = api_url + "/auth/login"
-    data = "user=" + username + "&pwd=" + password;
+    data = "user=" + encodeURI(username) + "&pwd=" + encodeURI(password);
     //console.log(data)
     $.ajax({
         type: "POST",
@@ -29,16 +67,6 @@ function login( ) {
         }
     });
 }
-
-$('#username').keypress(function (e) {
-    alert(e);
-    var keycode = (event.keyCode ? event.keyCode : event.which);
-    if (keycode=='13') {
-        alert(e);
-        login();
-    }
-}
-);
 
 function openSession(t, u) {
 	token = t;
@@ -233,7 +261,7 @@ function showFavorites( ) {
     // the array is defined and has at least one element
         getMoviesByIds(myFavorites);
     } else {
-    	$("#mainContentDiv").html("Your list is empty!");
+    	$("#mainContentDiv").html("<div id='mainTitleDiv'>Your list is empty!</div>");
     }
 }
 
