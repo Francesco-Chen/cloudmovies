@@ -4,6 +4,42 @@ html{
 	-ms-text-size-adjust:100%
 }
 
+.navigation{
+	cursor: pointer;
+}
+.listmovieimg img{
+	cursor: pointer;
+}
+#welcomemsg{
+	font-size: 150%;
+	padding:8px;
+}
+#logoutbutton{
+	border: none;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  margin: 4px 2px;
+  cursor: pointer;
+	background-color: gray;
+  color: white;
+  border: 2px solid #e7e7e7;
+}
+#showmorebutton{
+	  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 100%;
+}
 .poster {
   float: left;
   width: 350px;
@@ -236,6 +272,7 @@ img {
 
 #cmMiddleCol {
 	padding-left: 12px;
+	padding-right: 12px;
 }
 
 #cmRightCol {

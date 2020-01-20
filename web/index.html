@@ -21,8 +21,8 @@
 </div>
 <table id="cmMainTable" style="width:100%;border:0;"><tr>
     <td id="cmLeftCol" valign="top">
-                <div id="home"><b onclick="getMovieList()">Homepage</b></div>
-                <div id="favorites" style="display: none"><b onclick="showFavorites()">My favorites</b></div>
+                <div class="navigation" id="home"><b onclick="getMovieList()">Homepage</b></div>
+                <div class="navigation" id="favorites" style="display: none"><b onclick="showFavorites()">My favorites</b></div>
 
     </td>
     <td id="cmMiddleCol" valign="top">
@@ -43,8 +43,8 @@
                   <div id="loginError"></div>
                 </div> 
                 <div id="welcomeDiv" style="display: none">
-                    Welcome
-                    <input type="button" value="Sign Out" onclick="logout()">
+                    <div id="welcomemsg"></div>
+                    <input id="logoutbutton" type="button" value="Sign Out" onclick="logout()">
                 </div>
     </td>
 </tr></table>
@@ -57,11 +57,12 @@
 <script id="mainDivTmpl" type="text/x-jsrender">
     {{if title}}<div id="mainTitleDiv" style="margin-top:10px;font-size:14px;font-weight:bold;width:100%;text-align:center;">{{:title}}</div>{{/if}}
     {{for movies tmpl="#listMovieTmpl" /}}
-    {{if showmore}}<div id="showMoreButton{{:start}}" style="clear:both;width:100%;margin-top:5px;text-align:center;"><input type=button value="Show More" onclick="getMovieList({{:start}})"></div>{{/if}}
+    {{if showmore}}<div id="showMoreButton{{:start}}" style="clear:both;width:100%;margin-top:5px;text-align:center;">
+        <input id="showmorebutton" type=button value="Show More" onclick="getMovieList({{:start}})"></div>{{/if}}
 </script>
 
 <script id="listMovieTmpl" type="text/x-jsrender">
-    <div style="float:left;margin-right:12px;width:180px;height:320px;">
+    <div class= "listmovieimg"style="float:left;margin-right:12px;width:180px;height:320px;">
     <div>
     <img src="images/notfound.png" alt="loading..." width="180" height="270" id="poster{{:id}}" onclick="infoMovie({{:id}})"/>
     {{:"<scr" + "ipt defer type=&quot;text/javascript&quot;>"}}getPoster({{:id}});{{:"</scr" + "ipt>"}}

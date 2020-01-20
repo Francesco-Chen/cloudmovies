@@ -1,4 +1,4 @@
-var api_url = "http://10.104.154.107:8088";
+var api_url = "http://10.107.105.205:8088";
 var token = "";
 var current_user = "";
 
@@ -21,7 +21,7 @@ function login( ) {
             // svuoto campi form username e password
             $('#username').val('');
             $('#password').val('');
-            openSession(result.auth_token, current_user);
+            openSession(result.auth_token, username);
         },
         error: function(msg) {
             $("#loginError").html('Login error');
@@ -38,6 +38,7 @@ function openSession(t, u) {
 	$('#favorites').show('slow');
 	$('#loginDiv').hide('slow');
 	$('#welcomeDiv').show('slow');
+    $('#welcomemsg').html('Welcome '+ current_user);
 	getAllFavorites( );
 }
 
