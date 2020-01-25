@@ -1,0 +1,8 @@
+stages:
+  - deploy
+
+deploy_job:
+  stage: deploy
+  script:
+    - echo deploying_project
+  when: manual
