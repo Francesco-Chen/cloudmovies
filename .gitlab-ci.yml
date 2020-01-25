@@ -1,8 +1,14 @@
-stages:
-  - deploy
-
-deploy_job:
-  stage: deploy
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq git
+  - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    
+deploy_staging:
+  type: deploy
   script:
-    - echo deploying_project
+    - ssh -p 62457 studente@ml-lab-a08e3194-10fa-4b3b-b775-9e0c8a18d169.westeurope.cloudapp.azure.com "echo deploying_project_cloudmovies && exit"
   when: manual
