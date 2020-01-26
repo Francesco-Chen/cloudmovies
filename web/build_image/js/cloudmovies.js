@@ -1,4 +1,4 @@
-var api_url = "http://10.104.154.107:8088";
+var api_url = "http://localhost:8088";
 var token = "";
 var current_user = "";
 

@@ -8,6 +8,7 @@ kubectl create namespace cloudmovies
 # deploying ambassador
 kubectl apply -f ambassador/ambassador-rbac.yaml
 kubectl apply -f ambassador/ambassador-service.yaml
+kubectl port-forward svc/ambassador 8088
 
 # deployng the pv
 kubectl apply -f auth/db/userdb_pv.yml
@@ -42,10 +43,17 @@ export OPENFAAS_URL=http://127.0.0.1:31112
 # create secret with tmdb api key
 kubectl create secret generic tmdb-api-key --from-file=tmdb-api-key=tmdb_api_key.txt -n openfaas-fn
 # run within posters floder
+cd posters
 faas-cli deploy -f getposters.yml
+cd ..
 # apply mapping
 kubectl apply -f posters/getposters_mapping.yml
 
 ## deploy docker container for web interface (temporaneo)
 # from web folder
-docker run -d --name testnginx -p 8080:80 --rm --mount type=bind,source="$(pwd)",target=/usr/share/nginx/html nginx
+# docker run -d --name testnginx -p 8080:80 --rm --mount type=bind,source="$(pwd)",target=/usr/share/nginx/html nginx
+# deploy web interface
+kubectl apply -f web/web_deployment.yml
+kubectl apply -f web/web_svc.yml
+kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
+# go to localhost:8080 and test!
