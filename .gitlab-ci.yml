@@ -11,7 +11,6 @@ deploy_staging:
   type: deploy
   script:
     - echo "$TMDB_API_KEY" > tmdb_api_key.txt
-    - cat tmdb_api_key.txt
-    - scp -P 62871 tmdb_api_key.txt studente@ml-lab-a08e3194-10fa-4b3b-b775-9e0c8a18d169.westeurope.cloudapp.azure.com
+    - scp -P 62871 tmdb_api_key.txt studente@ml-lab-a08e3194-10fa-4b3b-b775-9e0c8a18d169.westeurope.cloudapp.azure.com:/home/studente
     - ssh -p 62871 studente@ml-lab-a08e3194-10fa-4b3b-b775-9e0c8a18d169.westeurope.cloudapp.azure.com "git clone https://gitlab.com/Robyt96/cloudmovies && mv tmdb_api_key.txt cloudmovies && cd cloudmovies && chmod +x setup.sh && ./setup.sh && rm tmdb_api_key.txt && exit"
   when: manual
