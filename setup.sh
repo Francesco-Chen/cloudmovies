@@ -1,14 +1,16 @@
+# before launching the automatic deployment job, make sure to create:
+# /data/favoritesdb, /data/userdb, /data/moviedb
+# for persistent storage
+
+
 # create namespace
 kubectl create namespace cloudmovies
-
-# make folders /data/favoritesdb, /data/userdb, /data/moviedb
-# for persistent storage
 
 ## apply all yml files from project root
 # deploying ambassador
 kubectl apply -f ambassador/ambassador-rbac.yaml
 kubectl apply -f ambassador/ambassador-service.yaml
-kubectl port-forward svc/ambassador 8088
+kubectl port-forward svc/ambassador 8088 &
 
 # deployng the pv
 kubectl apply -f auth/db/userdb_pv.yml
@@ -49,11 +51,9 @@ cd ..
 # apply mapping
 kubectl apply -f posters/getposters_mapping.yml
 
-## deploy docker container for web interface (temporaneo)
-# from web folder
-# docker run -d --name testnginx -p 8080:80 --rm --mount type=bind,source="$(pwd)",target=/usr/share/nginx/html nginx
-# deploy web interface
+
 kubectl apply -f web/web_deployment.yml
 kubectl apply -f web/web_svc.yml
 kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
+
 # go to localhost:8080 and test!
