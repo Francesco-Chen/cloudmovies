@@ -55,7 +55,7 @@ kubectl apply -f web/web_deployment.yml
 kubectl apply -f web/web_svc.yml
 
 # wait some seconds
-sleep(20)
+sleep 20
 
 # portforward 
 kubectl port-forward svc/ambassador 8088 &
