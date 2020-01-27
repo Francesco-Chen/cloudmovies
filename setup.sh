@@ -10,7 +10,6 @@ kubectl create namespace cloudmovies
 # deploying ambassador
 kubectl apply -f ambassador/ambassador-rbac.yaml
 kubectl apply -f ambassador/ambassador-service.yaml
-kubectl port-forward svc/ambassador 8088 &
 
 # deployng the pv
 kubectl apply -f auth/db/userdb_pv.yml
@@ -51,9 +50,15 @@ cd ..
 # apply mapping
 kubectl apply -f posters/getposters_mapping.yml
 
-
+# deploying web interface
 kubectl apply -f web/web_deployment.yml
 kubectl apply -f web/web_svc.yml
+
+# wait some seconds
+sleep(20)
+
+# portforward 
+kubectl port-forward svc/ambassador 8088 &
 kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
 
 # go to localhost:8080 and test!
