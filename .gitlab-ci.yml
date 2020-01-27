@@ -10,5 +10,5 @@ before_script:
 deploy_staging:
   type: deploy
   script:
-    - ssh -p 62871 studente@ml-lab-a08e3194-10fa-4b3b-b775-9e0c8a18d169.westeurope.cloudapp.azure.com "touch /tmp/deploying_project_cloudmovies.txt && exit"
+    - ssh -p 62871 studente@ml-lab-a08e3194-10fa-4b3b-b775-9e0c8a18d169.westeurope.cloudapp.azure.com "git clone https://gitlab.com/Robyt96/cloudmovies && cd cloudmovies && ./setup.sh && exit"
   when: manual
