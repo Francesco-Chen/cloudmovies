@@ -59,9 +59,9 @@ kubectl apply -f web/web_svc.yml
 sleep 20
 
 # portforward 
-kubectl port-forward svc/ambassador 8088 &
+nohup kubectl port-forward svc/ambassador 8088 &
 disown $!
-kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
+nohup kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
 disown $!
 
 # go to localhost:8080 and test!
