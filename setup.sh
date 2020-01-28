@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # before launching the automatic deployment job, make sure to create:
 # /data/favoritesdb, /data/userdb, /data/moviedb
 # for persistent storage
@@ -58,7 +59,7 @@ kubectl apply -f web/web_svc.yml
 sleep 20
 
 # portforward 
-nohup kubectl port-forward svc/ambassador 8088 &
-nohup kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
+kubectl port-forward svc/ambassador 8088 &
+kubectl port-forward -n cloudmovies svc/websvc 8080:80 &
 
 # go to localhost:8080 and test!
