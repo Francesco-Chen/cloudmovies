@@ -2,7 +2,7 @@
 
 CloudMovies - A simple application to search movies info and posters, based on a microservices architecture.
 
-## Getting Started
+## The application
 
 In this section are described the basic informations about each microservices of the application and the prerequisites and the instruction to run it.
 
