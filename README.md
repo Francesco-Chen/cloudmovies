@@ -1,4 +1,4 @@
-# Project Title
+# CloudMovies
 
 CloudMovies - A simple application to search movies info and posters, based on a microservices architecture.
 
@@ -46,4 +46,4 @@ These steps have to be followed in order to launch and use the application
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v3.0 License - see the [LICENSE.md](LICENSE.md) file for details
