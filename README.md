@@ -27,9 +27,9 @@ These steps have to be followed in order to launch and use the application
 
 * Clone this repository on your machine
 * Create the folders /data/favoritesdb, /data/userdb, /data/moviedb for persistent storage of DBs
-* Create a the file tmdb_api_key.txt containing your TMDB apikey and move it in the root project folder
+* Create the file tmdb_api_key.txt containing your TMDB apikey and move it in the root project folder
 * From root project folder execute the file setup.sh
-* Now the application should be deployed: at http://localhost:8080 is avaiable the web application; at http://localhost:8088 you can make http request directly to the API gateway
+* Now the application should be deployed: at http://localhost:8080 is avaiable the web application; at http://localhost:8088 you can make http requests directly to the API gateway
 
 ## Built With
 
