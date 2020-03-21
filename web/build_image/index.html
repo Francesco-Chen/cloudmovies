@@ -82,6 +82,9 @@
    {{:"<scr" + "ipt defer type=&quot;text/javascript&quot;>"}}getPoster({{:id}});{{:"</scr" + "ipt>"}}
    <br>
 </div>
+
+
+
 <div id="info">
     {{if isfavorite}} 
         <img src="images/{{:isfavorite}}favorite.png" alt="loading" width="20" id="favoriteIcon" onclick="toggleFavorite({{:id}})">
@@ -109,6 +112,9 @@
     <b>Revenue: </b>{{if revenue}} {{:revenue}} $ {{else}} N/A {{/if}}
     <br>
     <b>Keywords:</b> {{if keywords}} {{:keywords}} {{else}} N/A {{/if}}
+    <hr>
+    <br>
+    {{if youtube}}<iframe width="50%" height="300" align="middle" src="{{:youtube}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> {{else}} <p>ddd</p>{{/if}}
     
 </div>
 </script>

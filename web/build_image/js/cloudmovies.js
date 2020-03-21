@@ -147,26 +147,38 @@ function infoMovie(id) {
     var url = api_url + "/movie/" + id;
     //console.log(id)
     var myTemplate = $.templates("#movieInfoTmpl");
+    var result = null;
     $.ajax({
         type: "GET",
         url: url,
-        success: function(result){
-        	if (token) {
-        		if (myFavorites.includes(result.info.id)) {
-	        		result.info.isfavorite = "delete";
-	        	}
-	        	else {
-	        		result.info.isfavorite = "add";
-	        	}
-        	}
-        	
-            $("#mainContentDiv").html(myTemplate.render(result.info));
+        success: function(resp) {
+            result = resp
+            if (token) {
+                if (myFavorites.includes(result.info.id)) {
+                    result.info.isfavorite = "delete";
+                }
+                else {
+                    result.info.isfavorite = "add";
+                }
+            }
+            
+            $.ajax({
+                type: "GET",
+                url: api_url + "/function/gettrailer?movieid=" + id,
+                success: function(resp) {
+                    result.info.youtube = resp.trailerurl.replace("watch?v=", "embed/");
+                    console.log(resp);
+                    
+                    console.log(resp);
+                    $("#mainContentDiv").html(myTemplate.render(result.info));
+                }
+            });
+          
         },
         error: function(msg) {
             $("#mainContentDiv").html('error' + JSON.stringify(msg));
         }
     });
-
 }
 
 function searchMovie( ) {
@@ -223,6 +235,7 @@ function getPoster(movieId) {
         }
     });
 }
+
 
 //favorites handling
 var myFavorites = new Array( );
