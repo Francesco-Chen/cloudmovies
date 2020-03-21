@@ -1,0 +1,10 @@
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: gettrailer-mapping
+spec:
+  prefix: /function/gettrailer
+  rewrite: ""
+  bypass_auth: true 
+  service: gateway.openfaas:8080
