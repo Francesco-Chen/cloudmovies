@@ -452,6 +452,16 @@ class GetposterApiTest(unittest.TestCase):
         self.assertEqual(resp.status_code, 500)
 
 
+class GettrailerApiTest(unittest.TestCase):
+    def test_gettrailer(self):
+        resp = requests.get('http://localhost:8088/function/gettrailer?movieid=19995')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json()['trailerurl'], 'https://www.youtube.com/watch?v=5MB3Ea6L-gw')
+
+    def test_gettrailer_id_not_integer(self):
+        resp = requests.get('http://localhost:8088/function/gettrailer?movieid=4aaa')
+        self.assertEqual(resp.status_code, 500)
+
 
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
