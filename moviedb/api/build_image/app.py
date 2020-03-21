@@ -4,6 +4,7 @@ import mysql.connector
 import ast
 from flask import jsonify
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -28,14 +29,14 @@ fields = [
     'budget','genres','homepage','id','keywords','original_language',
     'original_title','overview','popularity','production_companies',
     'production_countries','release_date','revenue','runtime',
-    'spoken_languages','status','tagline','title','vote_average','vote_count'
+    'spoken_languages','status','tagline','title','vote_average','vote_count', 'actors', 'director'
 ]
 
 class MovieById(Resource):
     def get(self, movie_id):
         cur = get_cnx().cursor(buffered=True)
         try:
-            query = "select * from movietable where id =%d "  %int(movie_id)
+            query = " select mt.*, ct.actors, ct.directors from movietable as mt inner join casttable as ct on mt.id = ct.id where mt.id=%d"  %int(movie_id)
         except:
             resp = {
                 'status': 'fail',
@@ -52,12 +53,14 @@ class MovieById(Resource):
             d['spoken_languages'] = ast.literal_eval(d['spoken_languages'])
             d['production_companies'] = ast.literal_eval(d['production_companies'])
             d['production_countries'] = ast.literal_eval(d['production_countries'])
+            d['actors'] = json.loads(d['actors'])
 
             d['genres'] = [genre['name'] for genre in d['genres']]
             d['keywords'] = [keyword['name'] for keyword in d['keywords']]
             d['spoken_languages'] = [lang['name'] for lang in d['spoken_languages']]
             d['production_companies'] = [comp['name'] for comp in d['production_companies']]
             d['production_countries'] = [countr['name'] for countr in d['production_countries']]
+            d['actors'] = [actor['name'] for actor in d['actors']]
         else:
             d = []
         return jsonify(info=d)
@@ -110,19 +113,26 @@ class Search(Resource):
             return jsonify(movies=list_movies)
         
         else:
+            # extract genres param from url and convert it to list
+            genres = request.args.get('genres', '').split(',')
+
+            # construct filter tuple
             filter = (
                 '%' + request.args.get('title', '') + '%',
-                '%' + request.args.get('genre', '') + '%'
             )
+            for genre in genres:
+                filter += ('%' + genre + '%',)
+            app.logger.info('filter: ' + str(filter))
+
             cur = get_cnx().cursor(buffered=True)
-            query = (
-                "select id, title"
-                " from movietable"
-                " where title like %s"
-                "  and genres like %s"
-                " order by vote_average desc"
-                " limit 20"
-            )
+            query = ' '.join([
+                "select id, title",
+                "from movietable",
+                "where title like %s",
+                " and genres like %s" * len(genres),
+                "order by vote_average desc",
+                "limit 20"
+            ])
             cur.execute(query, filter)
             records = cur.fetchall()
             list_movies = [{'id': r[0], 'title': r[1]} for r in records]

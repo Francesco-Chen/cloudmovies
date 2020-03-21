@@ -1,5 +1,6 @@
 //var api_url = "http://localhost:8088";
 var api_url = "http://" + window.location.hostname + ":8088";
+console.log(api_url);
 var token = "";
 var current_user = "";
 
@@ -123,7 +124,7 @@ function getMovieList(start) {
         	}
         	//se result.movies ha dim maxResults: result.showmore = true; e result.start = start ? start+maxResults : maxResults;
         	if (result.movies.length === maxResults) {
-        		result.showmore = true;
+                result.showmore = true;
         		result.start = start ? start+maxResults : maxResults;
         	}
         	if (start) $('#showMoreButton'+start).hide();
@@ -133,6 +134,8 @@ function getMovieList(start) {
 
         	//idea, da capire: metto pulsante nel template con id "showMoreButton"+result.start
         	//quando chiamo la getMovieList con start valorizzato nascondo il pulsante corrispondente
+            $("#basicSearchDiv").show();
+            $("#advancedSearchDiv").hide();
             $("#mainContentDiv").append(myTemplate.render(result));
         },
         error: function(msg) {
@@ -167,9 +170,8 @@ function infoMovie(id) {
                 url: api_url + "/function/gettrailer?movieid=" + id,
                 success: function(resp) {
                     result.info.youtube = resp.trailerurl.replace("watch?v=", "embed/");
-                    console.log(resp);
-                    
-                    console.log(resp);
+                    $("#basicSearchDiv").hide();
+                    $("#advancedSearchDiv").hide();
                     $("#mainContentDiv").html(myTemplate.render(result.info));
                 }
             });
@@ -181,24 +183,24 @@ function infoMovie(id) {
     });
 }
 
-function searchMovie( ) {
-    var title = $('#searchMovieInput').val();
-    var url = api_url + "/search?title=" + encodeURI(title);
-    //console.log(url);
+function searchMovie(url) {
     var myTemplate = $.templates("#mainDivTmpl");
     $.ajax({
         type: "GET",
         url: url,
         success: function(result){
-            // $("#mainContentDiv").html(JSON.stringify(result));
             result.title = "Search results";
-            $("#mainContentDiv").html(myTemplate.render(result));
+            console.log(result);
+            if (result.movies.length !== 0) {
+                $("#mainContentDiv").html(myTemplate.render(result));
+            } else {
+                $("#mainContentDiv").html("<div id='mainTitleDiv'>No results found!</div>");
+            }
         },
         error: function() {
-            $("#mainContentDiv").html('error');
+            alert('Some error occured. Please try again');
         }
     });
-
 }
 
 function getMoviesByIds(idlist) {
@@ -271,6 +273,9 @@ function showFavorites( ) {
 	//altrimenti chiamo la getMoviesByIds
     if (!token) return;
 
+    $("#basicSearchDiv").hide();
+    $("#advancedSearchDiv").hide();
+
 	if (typeof myFavorites !== 'undefined' && myFavorites.length > 0) {
     // the array is defined and has at least one element
         getMoviesByIds(myFavorites);
@@ -327,3 +332,43 @@ function toggleFavorite(movieid) {
 	    });
     }
 }
+
+// called by onclick of "button" advancedSearch
+function showAdvancedSearch() {
+    $("#basicSearchDiv").hide();
+    $("#advancedSearchDiv").load('./advancedSearch.html');
+    $("#advancedSearchDiv").show();
+}
+
+function showBasicSearch() {
+    $("#basicSearchDiv").show();
+    $("#advancedSearchDiv").hide();
+}
+
+// submit genres form handler
+function onBasicSearchSubmit() {
+    var title = $('#searchMovieInput').val();
+    var url = api_url + "/search?title=" + encodeURI(title);
+
+    searchMovie(url);
+}
+
+function onAdvSearchSubmit() {
+    var params = "";
+
+    var title = $("#filterTitle").val();
+    if (title) params += (params ? "&" : "?") + "title=" + encodeURI(title);
+
+    var genres = $("#filterGenres option:selected").map(function () {
+        return $(this).val();
+    }).get().join(',');
+    if (genres) params += (params ? "&" : "?") + "genres=" + encodeURI(genres);
+
+    if (!params) {
+        alert("Choose at least a filter");
+        return false;
+    }
+
+    var url = api_url + "/search" + params;
+    searchMovie(url);
+};
