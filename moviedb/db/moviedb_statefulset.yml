@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: mysqld
-          image: robyt96/cloudmovies_moviedb:1.0
+          image: andrea95/cloudmovies_moviedb:1.1
           ports:
             - name: mysqld
               containerPort: 3306
