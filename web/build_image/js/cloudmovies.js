@@ -1,5 +1,6 @@
 //var api_url = "http://localhost:8088";
 var api_url = "http://" + window.location.hostname + ":8088";
+console.log(api_url);
 var token = "";
 var current_user = "";
 
@@ -314,3 +315,18 @@ function toggleFavorite(movieid) {
 	    });
     }
 }
+
+// called by onclick of "button" advancedSearch
+function showAdvancedSearch() {
+    $("#mainContentDiv").load('../advancedSearch.html');
+}
+
+// submit genres form handler
+function onGenresSubmit() {
+    var allVals = [];
+
+    $('input[type="checkbox"]:checked').each(function () {
+        allVals.push($(this).val());
+    });
+    alert(allVals);
+};
