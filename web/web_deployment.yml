@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: auth
-          image: robyt96/cloudmovies_web:1.0
+          image: robyt96/cloudmovies_web:1.1
           ports:
             - name: web
               containerPort: 80
