@@ -22,6 +22,12 @@ class MovieApiTest(unittest.TestCase):
         self.assertEqual(resp.status_code, 500)
         self.assertEqual(resp.json()['message'], 'Movie Id should be an integer')
 
+    def test_movie_actors_directors(self):
+       resp = requests.get('http://localhost:8088/movie/19995')
+       self.assertEqual(resp.status_code, 200)
+       self.assertTrue(resp.json()['info'].get('actors', ''))
+       self.assertEqual(resp.json()['info']['director'],'James Cameron')
+
     # /search?id
     def test_search_single_id(self):
         resp = requests.get('http://localhost:8088/search?id=19995')
