@@ -3,8 +3,10 @@
     <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
     <link rel='icon' href='images/favicon.ico' type='image/x-icon'/ >
     <link rel="stylesheet" type="text/css" href="css/screen.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/chosen.min.css" media="screen" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/cloudmovies.js"></script>
+    <script src="js/chosen.jquery.min.js"></script>
     <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
     
     <title>CloudMovies</title>
@@ -24,34 +26,38 @@
 <table id="cmMainTable" style="width:100%;border:0;"><tr>
     <td id="cmLeftCol" valign="top">
 
-        <ul>
-		  <li id="home" onclick="getMovieList()">Homepage</li>
-		  <li  id="favorites" style="display: none" onclick="showFavorites()">My favorites</li>
+        <ul  class="leftSideEntries">
+          <li class="leftSideEntry" id="home" onclick="getMovieList()">Homepage</li>
+		  <li class="leftSideEntry" id="favorites" style="display: none" onclick="showFavorites()">My favorites</li>
 		</ul>
 
     </td>
     <td id="cmMiddleCol" valign="top">
-                <form class="search-container" onsubmit="searchMovie(); return false;">
-                    <input type="text" id="searchMovieInput" placeholder="Search for a movie" />
-                    <img class="search-icon" onclick="searchMovie();" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" />
-                </form>
-                <div id="mainContentDiv"></div>
+        <div id="basicSearchDiv">
+            <form id="searchForm" class="search-container" onsubmit="onBasicSearchSubmit(); return false;">
+                <input type="text" id="searchMovieInput" placeholder="Search for a movie" />
+                <img class="search-icon" onclick="onBasicSearchSubmit();" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" />
+                <span class="toggleSearchBtn" onclick="showAdvancedSearch();">&raquo; advanced</span>
+            </form>
+        </div>
+        <div id="advancedSearchDiv"></div>
+        <div id="mainContentDiv"></div>
 
     </td>
     <td id="cmRightCol" valign="top">
-               <div class="login" id="loginDiv">
-                  <form id="loginform" onsubmit="login(); return false;">
-                    <input type="text" placeholder="Username" id="username" />
-                    <input type="password" placeholder="Password" id="password" />  
-                    <input type="submit" value="Sign In" />&nbsp;&nbsp;&nbsp;
-                    <input type="button" value="Register" onclick="register();" />
-                  </form>
-                  <div id="loginError"></div>
-                </div> 
-                <div id="welcomeDiv" style="display: none" align="center">
-                    <div id="welcomemsg"></div>
-                    <input id="logoutbutton" type="button" value="Sign Out" onclick="logout()">
-                </div>
+        <div class="login" id="loginDiv">
+            <form id="loginform" onsubmit="login(); return false;">
+            <input type="text" placeholder="Username" id="username" />
+            <input type="password" placeholder="Password" id="password" />  
+            <input type="submit" value="Sign In" />&nbsp;&nbsp;&nbsp;
+            <input type="button" value="Register" onclick="register();" />
+            </form>
+            <div id="loginError"></div>
+        </div> 
+        <div id="welcomeDiv" style="display: none" align="center">
+            <div id="welcomemsg"></div>
+            <input id="logoutbutton" type="button" value="Sign Out" onclick="logout()">
+        </div>
     </td>
 </tr></table>
       

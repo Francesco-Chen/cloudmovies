@@ -113,19 +113,26 @@ class Search(Resource):
             return jsonify(movies=list_movies)
         
         else:
+            # extract genres param from url and convert it to list
+            genres = request.args.get('genres', '').split(',')
+
+            # construct filter tuple
             filter = (
                 '%' + request.args.get('title', '') + '%',
-                '%' + request.args.get('genre', '') + '%'
             )
+            for genre in genres:
+                filter += ('%' + genre + '%',)
+            app.logger.info('filter: ' + str(filter))
+
             cur = get_cnx().cursor(buffered=True)
-            query = (
-                "select id, title"
-                " from movietable"
-                " where title like %s"
-                "  and genres like %s"
-                " order by vote_average desc"
-                " limit 20"
-            )
+            query = ' '.join([
+                "select id, title",
+                "from movietable",
+                "where title like %s",
+                " and genres like %s" * len(genres),
+                "order by vote_average desc",
+                "limit 20"
+            ])
             cur.execute(query, filter)
             records = cur.fetchall()
             list_movies = [{'id': r[0], 'title': r[1]} for r in records]
