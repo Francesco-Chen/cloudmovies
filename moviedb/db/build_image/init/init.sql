@@ -1,4 +1,4 @@
-create table if not exists movietable(
+CREATE TABLE IF NOT EXISTS movietable(
    budget int,
    genres varchar(2000),
    homepage varchar(200),
@@ -21,6 +21,11 @@ create table if not exists movietable(
    vote_count int
    ) character set=utf8mb4;
    
+CREATE TABLE IF NOT EXISTS casttable( 
+   id int primary key,
+   actors varchar(500),
+   directors varchar(50)
+   ) character set=utf8mb4;
    
 LOAD DATA INFILE '/docker-entrypoint-initdb.d/data/tmdb_5000_movies.csv' 
 INTO TABLE movietable
@@ -29,3 +34,10 @@ FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
+
+LOAD DATA INFILE '/docker-entrypoint-initdb.d/data/tmdb_actors_directors.txt' 
+INTO TABLE casttable
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n';
