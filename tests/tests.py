@@ -73,20 +73,33 @@ class MovieApiTest(unittest.TestCase):
         self.assertEqual(len(resp.json()['movies']), 0)
 
 
-    # /search?genre
-    def test_search_genre(self):
-        resp = requests.get('http://localhost:8088/search?genre=horror')
+    # /search?genres
+    def test_search_genres_single(self):
+        resp = requests.get('http://localhost:8088/search?genres=horror')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()['movies']), 20)
         self.assertEqual(resp.json()['movies'][0]['title'], 'Psycho')
 
-    def test_search_genre_not_existing(self):
-        resp = requests.get('http://localhost:8088/search?genre=xxxxxx')
+    def test_search_genres_multiple(self):
+        resp1 = requests.get('http://localhost:8088/search?genres=horror,fantasy,adventure')
+        self.assertEqual(resp1.status_code, 200)
+        self.assertEqual(len(resp1.json()['movies']), 5)
+
+        resp2 = requests.get('http://localhost:8088/movie/' + str(resp1.json()['movies'][0]['id']))
+        genres = resp2.json()['info']['genres']
+        self.assertTrue(
+            'Horror' in genres and
+            'Fantasy' in genres and
+            'Adventure' in genres
+        )
+
+    def test_search_genres_not_existing(self):
+        resp = requests.get('http://localhost:8088/search?genres=xxxxxx')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()['movies']), 0)
 
-    def test_search_title_and_genre(self):
-        resp = requests.get('http://localhost:8088/search?genre=adventure&title=pirates')
+    def test_search_title_and_genres(self):
+        resp = requests.get('http://localhost:8088/search?genres=adventure&title=pirates')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()['movies']), 6)
         self.assertEqual(resp.json()['movies'][5]['id'], 15511)
