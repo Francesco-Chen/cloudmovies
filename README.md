@@ -38,12 +38,3 @@ These steps have to be followed in order to launch and use the application
 * [Flask](https://www.palletsprojects.com/p/flask/)
 * [MySQL](https://www.mysql.com/)
 * [NGINX](https://www.nginx.com/)
-
-## Authors
-* Roberto Tagliabue 807409
-* Andrea Vegetti 794298
-* Haixing Chen 793027
-
-## License
-
-This project is licensed under the GNU General Public License v3.0 License - see the [LICENSE.md](LICENSE.md) file for details
