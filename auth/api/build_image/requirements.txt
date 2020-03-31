@@ -1,0 +1,6 @@
+flask
+flask-bcrypt
+flask-views
+flask-cors
+mysql-connector-python
+pyjwt

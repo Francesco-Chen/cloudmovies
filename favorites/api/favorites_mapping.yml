@@ -1,0 +1,27 @@
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: addfavorite-mapping
+spec:
+  prefix: /addfavorite
+  rewrite: ""
+  service: favoritessvc.cloudmovies:5003
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: deletefavorite-mapping
+spec:
+  prefix: /deletefavorite
+  rewrite: ""
+  service: favoritessvc.cloudmovies:5003
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: getfavorites-mapping
+spec:
+  prefix: /getfavorites
+  rewrite: ""
+  service: favoritessvc.cloudmovies:5003

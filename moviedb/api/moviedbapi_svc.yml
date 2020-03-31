@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moviedbapi-svc
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: moviedbapi-svc
+spec:
+  ports:
+  - name: moviedbapi-svc-port
+    port: 5002
+    targetPort: 5002
+  selector:
+    app.kubernetes.io/name: moviedbflask

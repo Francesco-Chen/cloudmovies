@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moviedbapi
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: moviedbflask
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: moviedbflask
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: moviedbflask
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: moviedbflaskc
+          image: andrea95/cloudmovies_moviedbapi:1.1.1
+          ports:
+            - name: moviedbflaskc
+              containerPort: 5002
+              protocol: TCP
+
+

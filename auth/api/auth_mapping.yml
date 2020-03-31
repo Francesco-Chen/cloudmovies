@@ -1,0 +1,37 @@
+---
+apiVersion: getambassador.io/v1
+kind: AuthService
+metadata:
+  name: authentication
+spec:
+  auth_service: "authsvc.cloudmovies:5000"
+  proto: http
+  allowed_request_headers:
+    - "Content-Type"
+  allowed_authorization_headers:
+    - "Cloudmovie-UserId"
+  include_body:
+    max_bytes: 4096
+    allow_partial: true
+  status_on_error:
+    code: 503
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: login-mapping
+spec:
+  prefix: /auth/login
+  rewrite: ""
+  bypass_auth: true 
+  service: authsvc.cloudmovies:5000
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: register-mapping
+spec:
+  prefix: /auth/register
+  rewrite: ""
+  bypass_auth: true 
+  service: authsvc.cloudmovies:5000

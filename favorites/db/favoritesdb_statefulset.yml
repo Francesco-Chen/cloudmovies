@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: favoritesdbstatefulset
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: favoritesdbstatefulset
+spec: 
+  serviceName: favoritesdb
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: favoritesdb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: favoritesdb
+    spec: 
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: userdb
+          image: robyt96/cloudmovies_favoritesdb:1.0
+          ports:
+            - name: favoritesdbport
+              containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - name: data-favoritesdb
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data-favoritesdb
+    spec:
+      storageClassName: manual
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 0.5Gi
+      selector:
+        matchLabels:
+          type: favoritesdb-pv
+

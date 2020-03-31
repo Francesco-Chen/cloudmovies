@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webdeployment
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: webdeployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: auth
+          image: frunciscus/cloudmovies_web:1.1.1
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: TCP

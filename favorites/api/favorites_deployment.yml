@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favoritesdeployment
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: favoritesdeployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: favorites
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: favorites
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: favorites
+          image: robyt96/cloudmovies_favoritesapi:1.0
+          ports:
+            - name: favorites
+              containerPort: 5003
+              protocol: TCP

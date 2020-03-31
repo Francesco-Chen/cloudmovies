@@ -1,0 +1,37 @@
+<div id="advancedSearchDiv">
+  <div style="width:100%;text-align:right;">
+    <span class="toggleSearchBtn" onclick="showBasicSearch();"> &laquo; basic search</span>
+  </div>
+  <form id="advSearchForm" onsubmit="onAdvSearchSubmit(this); return false;" style="margin:0;">
+    <table style="border:0;" cellpadding="5" cellspacing="0" class="advSearchTable">
+      <tr>
+        <td class="advSearchLabel">Title:</td>
+        <td>
+          <input type="text" id="filterTitle" class="advSearchInput" />
+        </td>
+        <td rowspan="2" style="padding-left:30px;" valign="bottom"><input id="advancedSearchSubmit" type="submit" value="Search" /></td>
+      </tr>
+      <tr>
+        <td class="advSearchLabel">Genres:</td>
+        <td>
+          <select style="width:304px;" multiple="multiple" id="filterGenres" class="chosen-select" data-placeholder="Choose some genres...">
+            <option value="action">Action</option>
+            <option value="horror">Horror</option>
+            <option value="thriller">Thriller</option>
+            <option value="adventure">Adventure</option>
+            <option value="drama">Drama</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="science fiction">Sci-Fi</option>
+            <option value="mystery">Mystery</option>
+            <option value="crime">Crime</option>
+            <option value="romance">Romance</option>
+            <option value="war">War</option>
+            <option value="animation">Animation</option>
+            <option value="music">Musical</option>
+          </select>
+          <script>$(".chosen-select").chosen();</script>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>

@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: moviedbstatefulset
+  namespace: cloudmovies
+  labels:
+    app.kubernetes.io/name: moviedbstatefulset
+spec:
+  serviceName: mysql
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mysql
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: mysqld
+          image: andrea95/cloudmovies_moviedb:1.1
+          ports:
+            - name: mysqld
+              containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - name: data-moviedb
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data-moviedb
+    spec:
+      storageClassName: manual
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 0.5Gi
+      selector:
+        matchLabels:
+          type: moviedb-pv
