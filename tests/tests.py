@@ -78,7 +78,6 @@ class MovieApiTest(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()['movies']), 0)
 
-
     # /search?genres
     def test_search_genres_single(self):
         resp = requests.get('http://localhost:8088/search?genres=horror')
@@ -109,6 +108,30 @@ class MovieApiTest(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()['movies']), 6)
         self.assertEqual(resp.json()['movies'][5]['id'], 15511)
+
+    # /search?start
+    def test_search_start(self):
+        resp = requests.get('http://localhost:8088/search?genres=adventure&start=318')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.json()['movies']), 20)
+        self.assertEqual(resp.json()['movies'][0]['title'], 'The Polar Express')
+    
+    def test_search_start_not_integer(self):
+        resp = requests.get('http://localhost:8088/search?start=aaa')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.json()['movies']), 20)
+        self.assertEqual(resp.json()['movies'][0]['id'], 40963)
+
+    def test_search_start_near_bottom(self):
+        resp = requests.get('http://localhost:8088/search?genres=music&start=180')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.json()['movies']), 5)
+        self.assertEqual(resp.json()['movies'][0]['id'], 66767)
+    
+    def test_search_start_out_bounds(self):
+        resp = requests.get('http://localhost:8088/search?title=the&start=3000')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.json()['movies']), 0)
 
 
     # /getlist
