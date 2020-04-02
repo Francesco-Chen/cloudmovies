@@ -69,8 +69,14 @@
 <script id="mainDivTmpl" type="text/x-jsrender">
     {{if title}}<div id="mainTitleDiv">{{:title}}</div>{{/if}}
     {{for movies tmpl="#listMovieTmpl" /}}
-    {{if showmore}}<div id="showMoreButton{{:start}}" style="clear:both;width:100%;margin-top:5px;text-align:center;">
-        <input id="showmorebutton" type=button value="Show More" onclick="getMovieList({{:start}})"></div>{{/if}}
+    {{if showmore}}
+        <div id="showMoreButton{{:start}}" style="clear:both;width:100%;margin-top:5px;text-align:center;">
+            <input id="showmorebutton" type=button value="Show More" 
+                {{if getmovielist}}onclick="getMovieList({{:start}})"{{/if}}
+                {{if search}}onclick="searchMovie('{{:url}}',{{:start}})"{{/if}}
+            >
+        </div>
+    {{/if}}
 </script>
 
 <script id="listMovieTmpl" type="text/x-jsrender">
@@ -99,15 +105,15 @@
     <br>
     <b>Director: </b>{{if director}} {{:director}} {{else}} N/A {{/if}}
     <br>
-    <b>Main actors: </b>{{if actors}} {{:actors}} {{else}} N/A {{/if}}
+    <b>Main actors: </b>{{if actors.length != 0}} {{:actors}} {{else}} N/A {{/if}}
     <br>
     <b>Release date: </b>{{if release_date}} {{:release_date}} {{else}} N/A {{/if}}
     <br>
     <b>Vote: </b>{{if vote_average}} {{:vote_average}} {{else}} N/A {{/if}}
     <br>
-    <b>Geners: </b>{{if genres}} {{:genres}} {{else}} N/A {{/if}}
+    <b>Geners: </b>{{if genres.length != 0}} {{:genres}} {{else}} N/A {{/if}}
     <br>
-    <b>Homepage: </b><a href="{{:homepage}}"> {{if homepage}} {{:homepage}} {{else}} N/A {{/if}} </a>
+    <b>Homepage: </b>{{if homepage}}<a href="{{:homepage}}">{{:homepage}}</a> {{else}} N/A {{/if}} 
     <br>
     <b>Budget: </b>{{if budget}} {{:budget}} $ {{else}} N/A {{/if}}
     <br>
@@ -115,16 +121,16 @@
     <br>
     <b>Overview: </b>{{if overview}} {{:overview}} {{else}} N/A {{/if}}
     <br>
-    <b>Producton Companies: </b>{{if production_companies}} {{:production_companies}} {{else}} N/A {{/if}}
+    <b>Producton Companies: </b>{{if production_companies.length != 0}} {{:production_companies}} {{else}} N/A {{/if}}
     <br>
     <b>Runtime: </b>{{if runtime}} {{:runtime}} min {{else}} N/A {{/if}}
     <br>
     <b>Revenue: </b>{{if revenue}} {{:revenue}} $ {{else}} N/A {{/if}}
     <br>
-    <b>Keywords:</b> {{if keywords}} {{:keywords}} {{else}} N/A {{/if}}
+    <b>Keywords:</b> {{if keywords.length != 0}} {{:keywords}} {{else}} N/A {{/if}}
     <hr>
     <br>
-    {{if youtube}}<iframe width="50%" height="300" align="middle" src="{{:youtube}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> {{else}} <p>ddd</p>{{/if}}
+    {{if youtube}}<iframe width="50%" height="300" align="middle" src="{{:youtube}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> {{/if}}
     
 </div>
 </script>
