@@ -7,5 +7,7 @@ functions:
     lang: python3-http
     handler: ./getposters
     image: robyt96/cloudmovies_getposters:1.0
+    labels:
+      com.openfaas.scale.min: "3"
     secrets:
     - tmdb-api-key
