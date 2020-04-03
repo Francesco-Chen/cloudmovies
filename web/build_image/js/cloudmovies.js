@@ -125,7 +125,8 @@ function getMovieList(start) {
         	//se result.movies ha dim maxResults: result.showmore = true; e result.start = start ? start+maxResults : maxResults;
         	if (result.movies.length === maxResults) {
                 result.showmore = true;
-        		result.start = start ? start+maxResults : maxResults;
+                result.start = start ? start+maxResults : maxResults;
+                result.getmovielist = true;
         	}
         	if (start) $('#showMoreButton'+start).hide();
         	//il pulsante showmore chiama getMovieList(result.start)
@@ -173,6 +174,13 @@ function infoMovie(id) {
                     $("#basicSearchDiv").hide();
                     $("#advancedSearchDiv").hide();
                     $("#mainContentDiv").html(myTemplate.render(result.info));
+                },
+                statusCode: {
+                    404: function() {
+                        $("#basicSearchDiv").hide();
+                        $("#advancedSearchDiv").hide();
+                        $("#mainContentDiv").html(myTemplate.render(result.info));
+                    }
                 }
             });
           
@@ -183,18 +191,40 @@ function infoMovie(id) {
     });
 }
 
-function searchMovie(url) {
+function searchMovie(url, start) {
+    var newUrl = url;
+    if (start) newUrl += "&start=" + start;
     var myTemplate = $.templates("#mainDivTmpl");
     $.ajax({
         type: "GET",
-        url: url,
+        url: newUrl,
         success: function(result){
-            result.title = "Search results";
-            console.log(result);
+            // set title only if start is not passed
+            if (!start) {
+                $("#mainContentDiv").empty();
+                result.title = "Search results";
+            }
+            
+            // set fields for the showmore button if there are enough results
+            if (result.movies.length === maxResults) {
+                result.showmore = true;
+                result.start = start ? start+maxResults : maxResults;
+                result.search = true;
+                result.url = url;
+            }
+
+            // hide previous button
+            if (start) $('#showMoreButton'+start).hide();
+            
+            // append result or show warning
             if (result.movies.length !== 0) {
-                $("#mainContentDiv").html(myTemplate.render(result));
+                $("#mainContentDiv").append(myTemplate.render(result));
             } else {
-                $("#mainContentDiv").html("<div id='mainTitleDiv'>No results found!</div>");
+                if (!start) {
+                    $("#mainContentDiv").html("<div id='mainTitleDiv'>No results found!</div>");
+                } else {
+                    $("#mainContentDiv").append("<div id='mainTitleDiv'>No results found!</div>");
+                }
             }
         },
         error: function() {

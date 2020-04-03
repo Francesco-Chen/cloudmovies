@@ -113,6 +113,14 @@ class Search(Resource):
             return jsonify(movies=list_movies)
         
         else:
+            # extract start parameter
+            startstr = request.args.get('start',0)
+            try:
+                start = int(startstr)
+            except:
+                start = 0
+            limit = 20
+
             # extract genres param from url and convert it to list
             genres = request.args.get('genres', '').split(',')
 
@@ -131,7 +139,7 @@ class Search(Resource):
                 "where title like %s",
                 " and genres like %s" * len(genres),
                 "order by vote_average desc",
-                "limit 20"
+                "limit %d, %d" %(start, limit)
             ])
             cur.execute(query, filter)
             records = cur.fetchall()
