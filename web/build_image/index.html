@@ -4,12 +4,39 @@
     <link rel='icon' href='images/favicon.ico' type='image/x-icon'/ >
     <link rel="stylesheet" type="text/css" href="css/screen.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="css/chosen.min.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="css/starability.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/cloudmovies.js"></script>
     <script src="js/chosen.jquery.min.js"></script>
     <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
     
     <title>CloudMovies</title>
+    <style>
+        .container {
+          display: inline-block;
+          cursor: pointer;
+        }
+        
+        .bar1, .bar2, .bar3 {
+          width: 35px;
+          height: 5px;
+          background-color: rgb(225, 225, 225);
+          margin: 6px 0;
+          transition: 0.4s;
+        }
+        
+        .change .bar1 {
+          -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+          transform: rotate(-45deg) translate(-9px, 6px);
+        }
+        
+        .change .bar2 {opacity: 0;}
+        
+        .change .bar3 {
+          -webkit-transform: rotate(45deg) translate(-8px, -8px);
+          transform: rotate(45deg) translate(-8px, -8px);
+        }
+        </style>
 </head>
 <body onload="checkSession(); getMovieList();">
 
@@ -19,20 +46,46 @@
        -->
        <img src="images/title.gif">
     </p>
+    <div id = "menuicon" class="container" onclick="hidemunu(this)">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+      <script>
+            menuicon.classList.toggle("change");
+      </script>
+      
     <ul>
 
     </ul>
 </div>
+
 <table id="cmMainTable" style="width:100%;border:0;"><tr>
+    
     <td id="cmLeftCol" valign="top">
 
         <ul  class="leftSideEntries">
           <li class="leftSideEntry" id="home" onclick="getMovieList()">Homepage</li>
 		  <li class="leftSideEntry" id="favorites" style="display: none" onclick="showFavorites()">My favorites</li>
-		</ul>
+        </ul>
+        
+        <div class="login" id="loginDiv">
+            <form id="loginform" onsubmit="login(); return false;">
+            <input type="text" placeholder="Username" id="username" />
+            <input type="password" placeholder="Password" id="password" />  
+            <input type="submit" value="Sign In" />&nbsp;&nbsp;&nbsp;
+            <input type="button" value="Register" onclick="register();" />
+            </form>
+            <div id="loginError"></div>
+        </div> 
+        <div id="welcomeDiv" style="display: none" align="center">
+            <div id="welcomemsg"></div>
+            <input id="logoutbutton" type="button" value="Sign Out" onclick="logout()">
+        </div>
 
     </td>
     <td id="cmMiddleCol" valign="top">
+
         <div id="basicSearchDiv">
             <form id="searchForm" class="search-container" onsubmit="onBasicSearchSubmit(); return false;">
                 <input type="text" id="searchMovieInput" placeholder="Search for a movie" />
@@ -44,6 +97,7 @@
         <div id="mainContentDiv"></div>
 
     </td>
+    <!--
     <td id="cmRightCol" valign="top">
         <div class="login" id="loginDiv">
             <form id="loginform" onsubmit="login(); return false;">
@@ -59,10 +113,11 @@
             <input id="logoutbutton" type="button" value="Sign Out" onclick="logout()">
         </div>
     </td>
+-->
 </tr></table>
       
 <div id="footer">
-    <p>CloudMovies - 2020</p>
+    <p align="center">CloudMovies - 2020</p>
 </div>
 
 
@@ -81,7 +136,7 @@
 
 <script id="listMovieTmpl" type="text/x-jsrender">
     <div class= "listmovieimg"style="float:left;margin-right:12px;width:180px;height:320px;">
-    <div>
+    <div class= "posterhover">
     <img src="images/notfound.png" alt="loading..." width="180" height="270" id="poster{{:id}}" onclick="infoMovie({{:id}})"/>
     {{:"<scr" + "ipt defer type=&quot;text/javascript&quot;>"}}getPoster({{:id}});{{:"</scr" + "ipt>"}}
     </div><div class="imagetitle" >{{:title}}</div>
@@ -98,11 +153,61 @@
 
 
 <div id="info">
-    {{if isfavorite}} 
-        <img src="images/{{:isfavorite}}favorite.png" alt="loading" width="20" id="favoriteIcon" onclick="toggleFavorite({{:id}})">
-    {{/if}}
-    <h1>{{:title}}</h1>
-    <br>
+    <table>
+        <tr>
+          <th><h1>{{:title}}</h1></th>
+          <th><h1>   </h1></th>
+          <th> {{if isfavorite}} 
+            <img src="images/{{:isfavorite}}favorite.png" alt="loading" width="40" id="favoriteIcon" onclick="toggleFavorite({{:id}})">
+            {{/if}}</th>
+        </tr>
+      
+      </table>
+    <section>
+        <div class="starability-container">
+        <form>
+        <fieldset class="starability-slot"> 
+              <legend>Star rating:</legend>
+    
+              {{if vote_average > 8 }} 
+              <input type="radio" id="rate5-2" name="rating" value="5" checked/>
+               {{else}} 
+               <input type="radio" id="rate5-2" name="rating" value="5" />
+               {{/if}}
+              <label for="rate5-2" title="Amazing">5 stars</label>
+
+              {{if vote_average > 6 && vote_average <= 8}} 
+              <input type="radio" id="rate4-2" name="rating" value="4" checked/>
+               {{else}} 
+               <input type="radio" id="rate4-2" name="rating" value="4" />
+               {{/if}}
+              <label for="rate4-2" title="Very good">4 stars</label>
+    
+              {{if vote_average > 4 && vote_average <= 6}} 
+              <input type="radio" id="rate3-2" name="rating" value="3" checked/>
+               {{else}} 
+               <input type="radio" id="rate3-2" name="rating" value="3" />
+               {{/if}}
+              <label for="rate3-2" title="Average">3 stars</label>
+    
+              {{if vote_average > 2 && vote_average <= 4}} 
+              <input type="radio" id="rate2-2" name="rating" value="2" checked/>
+               {{else}} 
+               <input type="radio" id="rate2-2" name="rating" value="2" />
+               {{/if}}
+              <label for="rate2-2" title="Not good">2 stars</label>
+    
+              {{if vote_average > 0 && vote_average <= 2}} 
+              <input type="radio" id="rate1-2" name="rating" value="1" checked/>
+               {{else}} 
+               <input type="radio" id="rate1-2" name="rating" value="1" />
+               {{/if}}
+              <label for="rate1-2" title="Terrible">1 star</label>
+            </fieldset>
+        </form>
+        </div>
+    </section>
+    <br>    
     <b>Director: </b>{{if director}} {{:director}} {{else}} N/A {{/if}}
     <br>
     <b>Main actors: </b>{{if actors.length != 0}} {{:actors}} {{else}} N/A {{/if}}
@@ -136,7 +241,17 @@
 </script>
 
 
-
+<script>
+    function hidemunu(icon) {
+        icon.classList.toggle("change");
+      var x = document.getElementById("cmLeftCol");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+    </script>
 
 </body>
 </html>
