@@ -7,12 +7,11 @@ html{
 #info {
 	color:white;
 	font-size: 16px;
-	padding-left: 350px;
 }
 
 /*error message color*/
 #loginError {
-	color: black;
+	color: red;
 }
 
 /**/
@@ -63,7 +62,7 @@ html{
   list-style-type: none;
   margin: 0;
   padding: 0;
-  /*width: 100%;*/
+  width: 100%;
   background-color: #f1f1f1;
 }
 
@@ -72,7 +71,7 @@ html{
   color: white;
   padding: 8px 16px;
   text-decoration: none;
-  background-color: #1c1c1c;
+  background-color: black;
   cursor: pointer;
   font-size: 150%;
 }
@@ -143,7 +142,7 @@ body {
 	padding:0;
 	border:0;			/* This removes the border around the viewport in old versions of IE */
 	width:100%;
-	background:white;
+	background:black;
 	min-width:600px;		/* Minimum width of layout - remove line if not required */
 					/* The min-width property does not work in old versions of Internet Explorer */
 	font-size:90%;
@@ -277,13 +276,12 @@ img {
 	min-height: 1200px;
 }
 
-#menuCol {
+#cmLeftCol {
 	width:210px;
 	background-color: #1c1c1c;
 }
 
 #cmMiddleCol {
-	width:100%;
 	padding-left: 12px;
 	padding-right: 12px;
 	background-color: #444444;
@@ -291,7 +289,7 @@ img {
 
 #cmRightCol {
 	width:210px;
-	background-color: #0ac147;
+	background-color: #1c1c1c;
 }
 
 /* Advanced Search Style */
