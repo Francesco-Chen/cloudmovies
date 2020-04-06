@@ -10,7 +10,7 @@
     <script src="js/chosen.jquery.min.js"></script>
     <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
     
-    <title>CloudMovies</title>
+    <title>CloudMovies 2020</title>
     <style>
         .container {
           display: inline-block;
@@ -51,9 +51,7 @@
         <div class="bar2"></div>
         <div class="bar3"></div>
       </div>
-      <script>
-            menuicon.classList.toggle("change");
-      </script>
+
       
     <ul>
 
@@ -62,7 +60,7 @@
 
 <table id="cmMainTable" style="width:100%;border:0;"><tr>
     
-    <td id="cmLeftCol" valign="top">
+    <td id="menuCol" valign="top">
 
         <ul  class="leftSideEntries">
           <li class="leftSideEntry" id="home" onclick="getMovieList()">Homepage</li>
@@ -84,6 +82,12 @@
         </div>
 
     </td>
+
+        <script>
+        var x = document.getElementById("menuCol");
+        x.style.display = "none";
+        </script>
+
     <td id="cmMiddleCol" valign="top">
 
         <div id="basicSearchDiv">
@@ -163,50 +167,7 @@
         </tr>
       
       </table>
-    <section>
-        <div class="starability-container">
-        <form>
-        <fieldset class="starability-slot"> 
-              <legend>Star rating:</legend>
     
-              {{if vote_average > 8 }} 
-              <input type="radio" id="rate5-2" name="rating" value="5" checked/>
-               {{else}} 
-               <input type="radio" id="rate5-2" name="rating" value="5" />
-               {{/if}}
-              <label for="rate5-2" title="Amazing">5 stars</label>
-
-              {{if vote_average > 6 && vote_average <= 8}} 
-              <input type="radio" id="rate4-2" name="rating" value="4" checked/>
-               {{else}} 
-               <input type="radio" id="rate4-2" name="rating" value="4" />
-               {{/if}}
-              <label for="rate4-2" title="Very good">4 stars</label>
-    
-              {{if vote_average > 4 && vote_average <= 6}} 
-              <input type="radio" id="rate3-2" name="rating" value="3" checked/>
-               {{else}} 
-               <input type="radio" id="rate3-2" name="rating" value="3" />
-               {{/if}}
-              <label for="rate3-2" title="Average">3 stars</label>
-    
-              {{if vote_average > 2 && vote_average <= 4}} 
-              <input type="radio" id="rate2-2" name="rating" value="2" checked/>
-               {{else}} 
-               <input type="radio" id="rate2-2" name="rating" value="2" />
-               {{/if}}
-              <label for="rate2-2" title="Not good">2 stars</label>
-    
-              {{if vote_average > 0 && vote_average <= 2}} 
-              <input type="radio" id="rate1-2" name="rating" value="1" checked/>
-               {{else}} 
-               <input type="radio" id="rate1-2" name="rating" value="1" />
-               {{/if}}
-              <label for="rate1-2" title="Terrible">1 star</label>
-            </fieldset>
-        </form>
-        </div>
-    </section>
     <br>    
     <b>Director: </b>{{if director}} {{:director}} {{else}} N/A {{/if}}
     <br>
@@ -235,23 +196,10 @@
     <b>Keywords:</b> {{if keywords.length != 0}} {{:keywords}} {{else}} N/A {{/if}}
     <hr>
     <br>
-    {{if youtube}}<iframe width="50%" height="300" align="middle" src="{{:youtube}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> {{/if}}
+    <h3>Trailer:</h3>{{if youtube}}<iframe width="550" height="300" align="middle" src="{{:youtube}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> {{/if}}
     
 </div>
 </script>
-
-
-<script>
-    function hidemunu(icon) {
-        icon.classList.toggle("change");
-      var x = document.getElementById("cmLeftCol");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-    }
-    </script>
 
 </body>
 </html>

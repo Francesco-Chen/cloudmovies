@@ -401,4 +401,14 @@ function onAdvSearchSubmit() {
 
     var url = api_url + "/search" + params;
     searchMovie(url);
-};
+}
+function hidemunu(icon) {
+    icon.classList.toggle("change");
+  var x = document.getElementById("menuCol");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+;
