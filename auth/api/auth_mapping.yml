@@ -25,6 +25,8 @@ spec:
   rewrite: ""
   bypass_auth: true 
   service: authsvc.cloudmovies:5000
+  timeout_ms: 10000
+  connect_timeout_ms: 10000
 ---
 apiVersion: getambassador.io/v1
 kind: Mapping
@@ -35,3 +37,17 @@ spec:
   rewrite: ""
   bypass_auth: true 
   service: authsvc.cloudmovies:5000
+  timeout_ms: 10000
+  connect_timeout_ms: 10000
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: deleteuser-mapping
+spec:
+  prefix: /auth/deleteuser
+  rewrite: ""
+  bypass_auth: true 
+  service: authsvc.cloudmovies:5000
+  timeout_ms: 10000
+  connect_timeout_ms: 10000

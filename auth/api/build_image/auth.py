@@ -6,6 +6,7 @@ from flask import (
     Blueprint, request, make_response, jsonify
 )
 from flask.views import MethodView
+import requests
 
 from . import bcrypt, app
 
@@ -178,7 +179,7 @@ class LoginAPI(MethodView):
             return make_response(jsonify(responseObject)), 500
 
 #
-class UserAPI(MethodView):
+class CheckTokenAPI(MethodView):
     """
     User Resource
     """
@@ -217,12 +218,92 @@ class UserAPI(MethodView):
                 'message': 'Provide a valid auth token.'
             }
             return make_response(jsonify(responseObject)), 401
+
+    def delete(self, dummy):
+        try:
+            app.logger.info('calling get function from delete function')
+            return self.get(dummy)
+        except Exception as e:
+            app.logger.info(e)
 #
+
+
+class DeleteUserApi(MethodView):
+    def delete(self):
+        # get the auth token
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            try:
+                auth_token = auth_header.split(" ")[1]
+            except IndexError:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'Bearer token malformed.'
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            auth_token = ''
+        if auth_token:
+            payload = decode_auth_token(auth_token) # if there is an error then payload is a string
+            if not isinstance(payload, str):
+                # call deleteall for clear user lists
+                r = requests.delete(
+                    'http://ambassador.default:8088/deleteall',
+                    headers = {
+                    'Authorization': 'Bearer ' + auth_token
+                    }
+                )
+                app.logger.info(r)
+                if (r.status_code == 200):
+                    # delete user from db
+                    userid = payload['sub']
+                    cur = get_cnx().cursor()
+                    query = "delete from users where id = %s" %userid
+                    cur.execute(query)
+                    if (cur.rowcount == 1): # if user was cancelled correctly
+                        responseObject = {
+                            'status': 'success',
+                            'message': 'User %s deleted' %payload['username']
+                        }
+                        resp = make_response(jsonify(responseObject))
+                        return resp, 200
+                    else: 
+                        responseObject = {
+                            'status': 'fail',
+                            'message': 'Some error occured while deleting user'
+                        }
+                        resp = make_response(jsonify(responseObject))
+                        return resp, 500
+                # if error during deleting user lists
+                else:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': 'Some error occured while deleting user'
+                    }
+                    resp = make_response(jsonify(responseObject))
+                    return resp, 500
+            # if error in decoding the token
+            responseObject = {
+                'status': 'fail',
+                'message': payload
+            }
+            return make_response(jsonify(responseObject)), 401
+        # if no auth token
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Provide a valid auth token.'
+            }
+            return make_response(jsonify(responseObject)), 401
+#
+
+
 
 # define the API resources
 register_view = RegisterAPI.as_view('register_api')
 login_view = LoginAPI.as_view('login_api')
-check_token_view = UserAPI.as_view('check_token_api')
+check_token_view = CheckTokenAPI.as_view('check_token_api')
+delete_user_view = DeleteUserApi.as_view('delete_user_api')
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
@@ -233,10 +314,15 @@ auth_blueprint.add_url_rule(
 auth_blueprint.add_url_rule(
     '/<path:dummy>',
     view_func=check_token_view,
-    methods=['GET']
+    methods=['GET', 'DELETE']
 )
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=register_view,
     methods=['POST']
+)
+auth_blueprint.add_url_rule(
+    '/auth/deleteuser',
+    view_func=delete_user_view,
+    methods=['DELETE']
 )

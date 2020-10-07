@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: moviedbflaskc
-          image: andrea95/cloudmovies_moviedbapi:1.1.1
+          image: robyt96/cloudmovies_moviedbapi:1.1.3
           ports:
             - name: moviedbflaskc
               containerPort: 5002

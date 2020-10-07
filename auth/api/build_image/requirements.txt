@@ -4,3 +4,4 @@ flask-views
 flask-cors
 mysql-connector-python
 pyjwt
+requests

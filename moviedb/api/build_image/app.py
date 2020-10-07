@@ -67,18 +67,29 @@ class MovieById(Resource):
 
 class MovieList(Resource):
     def get(self):
-        startstr = request.args.get('start',0)
+        # extract start parameter
+        startstr = request.args.get('start', 0)
         try:
             start = int(startstr)
         except:
             start = 0
         limit = 20
         cur = get_cnx().cursor(buffered=True)
+
+        # extract orderby and desc parameter
+        orderby = request.args.get('orderby', 'vote_average')
+        if (orderby not in ['release_date', 'vote_average']):
+            orderby = 'vote_average'
+
+        sorting = request.args.get('sorting', 'desc')
+        if (sorting not in ['asc', 'desc']):
+            sorting = 'desc'
+
         query = (
             "select id, title"
             " from movietable"
-            " order by vote_average desc"
-            " limit %d, %d" %(start, limit)
+            " order by %s %s, id asc"
+            " limit %d, %d" %(orderby, sorting, start, limit)
         )
         app.logger.info('query: ' + query)
         cur.execute(query)
@@ -113,6 +124,14 @@ class Search(Resource):
             return jsonify(movies=list_movies)
         
         else:
+            # extract start parameter
+            startstr = request.args.get('start',0)
+            try:
+                start = int(startstr)
+            except:
+                start = 0
+            limit = 20
+
             # extract genres param from url and convert it to list
             genres = request.args.get('genres', '').split(',')
 
@@ -124,14 +143,24 @@ class Search(Resource):
                 filter += ('%' + genre + '%',)
             app.logger.info('filter: ' + str(filter))
 
+
+            # extract orderby and desc parameter
+            orderby = request.args.get('orderby', 'vote_average')
+            if (orderby not in ['release_date', 'vote_average']):
+                orderby = 'vote_average'
+
+            sorting = request.args.get('sorting', 'desc')
+            if (sorting not in ['asc', 'desc']):
+                sorting = 'desc'
+
             cur = get_cnx().cursor(buffered=True)
             query = ' '.join([
                 "select id, title",
                 "from movietable",
                 "where title like %s",
                 " and genres like %s" * len(genres),
-                "order by vote_average desc",
-                "limit 20"
+                "order by %s %s, id asc" %(orderby, sorting),
+                "limit %d, %d" %(start, limit)
             ])
             cur.execute(query, filter)
             records = cur.fetchall()
